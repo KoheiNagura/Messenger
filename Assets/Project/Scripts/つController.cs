@@ -35,7 +35,13 @@ public class つController : MonoBehaviour
         currentつ.Drop();
         lastDroppedつ = currentつ;
         currentつ = null;
-        lastDroppedつ.OnStopped.Subscribe(i => Generaつ()).AddTo(lastDroppedつ);
+        lastDroppedつ.OnStopped
+            .Where(_ => currentつ == null)
+            .Subscribe(_ => Generaつ()).AddTo(lastDroppedつ);
+        // テスト用
+        lastDroppedつ.OnOutOfBounds
+            .Where(_ => currentつ == null)
+            .Subscribe(_ => Generaつ()).AddTo(lastDroppedつ);
     }
 
     private void Move(float x)
