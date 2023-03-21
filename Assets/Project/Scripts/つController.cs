@@ -2,11 +2,13 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using InputAsRx.Triggers;
+using System.Linq;
 
 public class つController : MonoBehaviour 
 {
     [SerializeField] private つ つPrefab;
     [SerializeField] private float rotationSpeed, moveSpeed;
+    [SerializeField] private Sprite[] sprites;
     private つ currentつ, lastDroppedつ;
 
     private void Awake()
@@ -28,6 +30,7 @@ public class つController : MonoBehaviour
         currentつ = Instantiate(つPrefab);
         currentつ.transform.position = Vector3.up * 4;
         currentつ.SetPt(Random.Range(10, 50));
+        currentつ.SetSprite(GetRandomSpriつ());
     }
 
     private void Drop()
@@ -51,4 +54,7 @@ public class つController : MonoBehaviour
         posX = Mathf.Clamp(posX, -4, 4);
         currentつ.transform.position = new Vector3(posX, currentつ.transform.position.y, 0);
     }
+
+    private Sprite GetRandomSpriつ()
+        => sprites.OrderBy(_ => System.Guid.NewGuid()).First();
 }
