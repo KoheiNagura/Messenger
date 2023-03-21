@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Collider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer), typeof(PolygonCollider2D), typeof(Rigidbody2D))]
 public class つ : MonoBehaviour {
     public int pt { get; private set; }
     public IObservable<Collision2D> OnHitOtherつ;
     public IObservable<Unit> OnOutOfBounds;
     public IObservable<Unit> OnStopped;
 
+    private PolygonCollider2D collider;
     private SpriteRenderer renderer;
     private Rigidbody2D rigidbody;
     private bool isDroping;
@@ -20,31 +21,35 @@ public class つ : MonoBehaviour {
 
     private void Awake()
     {
+        collider = GetComponent<PolygonCollider2D>();
         renderer = GetComponent<SpriteRenderer>();
         rigidbody = GetComponent<Rigidbody2D>();
         velocities = new List<Vector2>();
+        InitializeObservables();
+        OnStopped.Subscribe(_ => velocityObservable?.Dispose()).AddTo(gameObject);
+        OnHitOtherつ.FirstOrDefault().Subscribe(_ => isDroping = false).AddTo(gameObject);
+        // 仮置き ObjectPoolにしてもいいかも
+        OnOutOfBounds.Subscribe(_ => Destroy(gameObject)).AddTo(gameObject);
+    }
 
+    private void InitializeObservables()
+    {
         OnHitOtherつ = this.OnCollisionEnter2DAsObservable()
             .Where(i => i.collider.tag == "つ");
         OnOutOfBounds = this.UpdateAsObservable()
-            .First(_ => IsMoving() && IsOutOfBounds());
+            .Where(_ => IsMoving() && IsOutOfBounds())
+            .Take(1);
         OnStopped = this.UpdateAsObservable()
-            .First(_ => !isDroping && IsStopping());
+            .Where(_ => !isDroping && IsStopping())
+            .Take(1);
         velocityObservable = Observable.Interval(TimeSpan.FromSeconds(.1f))
-            .Where(_ => !isDroping)
+            .Where(_ => !isDroping && rigidbody.simulated)
             .Subscribe(_ => 
             {
                 velocities.Add(rigidbody.velocity);
                 if (velocities.Count > 10) velocities.RemoveAt(0);
-            });
-
-        OnStopped.Subscribe(_ => velocityObservable?.Dispose());
-        OnHitOtherつ.First().Subscribe(_ => isDroping = false);
-    }
-
-    private void OnDestroy()
-    {
-        velocityObservable?.Dispose();
+            })
+            .AddTo(gameObject);
     }
 
     public void Drop()
@@ -62,7 +67,24 @@ public class つ : MonoBehaviour {
     }
 
     public void SetSprite(Sprite sprite) 
-        => renderer.sprite = sprite;
+    {
+        renderer.sprite = sprite;
+        SetPhysicsShape();
+    }
+
+    private void SetPhysicsShape()
+    {
+        var sprite = renderer.sprite;
+        var shapeCount = sprite.GetPhysicsShapeCount();
+        collider.pathCount = shapeCount;
+        var shape = new List<Vector2>();
+        for (var i = 0; i < shapeCount; i++)
+        {
+            shape.Clear();
+            sprite.GetPhysicsShape(i, shape);
+            collider.SetPath(i, shape.ToArray());
+        }
+    }
 
     private bool IsOutOfBounds()
     {
@@ -76,7 +98,7 @@ public class つ : MonoBehaviour {
     private bool IsStopping()
     {
         if (isDroping) return false;
-        if (velocities.Count < 1) return false;
-        return (velocities.Select(i => i.magnitude).Average() > 0.01f);
+        if (velocities.Count < 5) return false;
+        return (velocities.Select(i => i.magnitude).Average() < 0.01f);
     }
 }
