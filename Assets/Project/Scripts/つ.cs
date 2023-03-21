@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Collider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer), typeof(PolygonCollider2D), typeof(Rigidbody2D))]
 public class つ : MonoBehaviour {
     public int pt { get; private set; }
     public IObservable<Collision2D> OnHitOtherつ;
     public IObservable<Unit> OnOutOfBounds;
     public IObservable<Unit> OnStopped;
 
+    private PolygonCollider2D collider;
     private SpriteRenderer renderer;
     private Rigidbody2D rigidbody;
     private bool isDroping;
@@ -20,6 +21,7 @@ public class つ : MonoBehaviour {
 
     private void Awake()
     {
+        collider = GetComponent<PolygonCollider2D>();
         renderer = GetComponent<SpriteRenderer>();
         rigidbody = GetComponent<Rigidbody2D>();
         velocities = new List<Vector2>();
@@ -65,7 +67,24 @@ public class つ : MonoBehaviour {
     }
 
     public void SetSprite(Sprite sprite) 
-        => renderer.sprite = sprite;
+    {
+        renderer.sprite = sprite;
+        SetPhysicsShape();
+    }
+
+    private void SetPhysicsShape()
+    {
+        var sprite = renderer.sprite;
+        var shapeCount = sprite.GetPhysicsShapeCount();
+        collider.pathCount = shapeCount;
+        var shape = new List<Vector2>();
+        for (var i = 0; i < shapeCount; i++)
+        {
+            shape.Clear();
+            sprite.GetPhysicsShape(i, shape);
+            collider.SetPath(i, shape.ToArray());
+        }
+    }
 
     private bool IsOutOfBounds()
     {
