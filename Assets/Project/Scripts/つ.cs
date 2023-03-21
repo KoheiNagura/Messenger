@@ -23,28 +23,31 @@ public class つ : MonoBehaviour {
         renderer = GetComponent<SpriteRenderer>();
         rigidbody = GetComponent<Rigidbody2D>();
         velocities = new List<Vector2>();
+        InitializeObservables();
+        OnStopped.Subscribe(_ => velocityObservable?.Dispose()).AddTo(gameObject);
+        OnHitOtherつ.FirstOrDefault().Subscribe(_ => isDroping = false).AddTo(gameObject);
+        // 仮置き ObjectPoolにしてもいいかも
+        OnOutOfBounds.Subscribe(_ => Destroy(gameObject)).AddTo(gameObject);
+    }
 
+    private void InitializeObservables()
+    {
         OnHitOtherつ = this.OnCollisionEnter2DAsObservable()
             .Where(i => i.collider.tag == "つ");
         OnOutOfBounds = this.UpdateAsObservable()
-            .First(_ => IsMoving() && IsOutOfBounds());
+            .Where(_ => IsMoving() && IsOutOfBounds())
+            .Take(1);
         OnStopped = this.UpdateAsObservable()
-            .First(_ => !isDroping && IsStopping());
+            .Where(_ => !isDroping && IsStopping())
+            .Take(1);
         velocityObservable = Observable.Interval(TimeSpan.FromSeconds(.1f))
-            .Where(_ => !isDroping)
+            .Where(_ => !isDroping && rigidbody.simulated)
             .Subscribe(_ => 
             {
                 velocities.Add(rigidbody.velocity);
                 if (velocities.Count > 10) velocities.RemoveAt(0);
-            });
-
-        OnStopped.Subscribe(_ => velocityObservable?.Dispose());
-        OnHitOtherつ.First().Subscribe(_ => isDroping = false);
-    }
-
-    private void OnDestroy()
-    {
-        velocityObservable?.Dispose();
+            })
+            .AddTo(gameObject);
     }
 
     public void Drop()
@@ -76,7 +79,7 @@ public class つ : MonoBehaviour {
     private bool IsStopping()
     {
         if (isDroping) return false;
-        if (velocities.Count < 1) return false;
-        return (velocities.Select(i => i.magnitude).Average() > 0.01f);
+        if (velocities.Count < 5) return false;
+        return (velocities.Select(i => i.magnitude).Average() < 0.01f);
     }
 }
