@@ -10,28 +10,46 @@ public class つController : MonoBehaviour
     [SerializeField] private float rotationSpeed, moveSpeed;
     [SerializeField] private Sprite[] sprites;
     private つ currentつ, lastDroppedつ;
+    private float axisX = 0;
 
     private void Awake()
     {
         Generaつ();
+        SubscribeObservables();
+    }
+
+    private void SubscribeObservables()
+    {
         this.OnKeyAsObservable(KeyCode.Space)
             .Where(_ => currentつ != null)
-            .Subscribe(_ => currentつ?.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime));
-        this.OnKeyDownAsObservable(KeyCode.Return)
+            .Subscribe(_ => Rotaつ())
+            .AddTo(gameObject);
+        this.OnKeyUpAsObservable(KeyCode.Space)
             .Where(_ => currentつ != null)
-            .Subscribe(_ => Drop());
+            .Subscribe(_ => Drop())
+            .AddTo(gameObject);
         this.OnAxisAsObservable("Horizontal")
             .Where(_ => currentつ != null)
-            .Subscribe(x => Move(x));
+            .Subscribe(x => axisX = x)
+            .AddTo(gameObject);
+        this.UpdateAsObservable()
+            .Where(_ => currentつ != null && axisX != 0)
+            .Subscribe(_ => Move(axisX))
+            .AddTo(gameObject);
     }
 
     private void Generaつ()
     {
         currentつ = Instantiate(つPrefab);
-        currentつ.transform.position = Vector3.up * 4;
-        currentつ.SetPt(Random.Range(10, 50));
-        currentつ.SetSprite(GetRandomSpriつ());
+        currentつ.transform.position = Vector3.up * 18;
+        currentつ.SetPt(Random.Range(100, 300));
+        var sprite = GetRandomSpriつ();
+        currentつ.SetSprite(sprite);
     }
+
+    private void Rotaつ()
+        => currentつ?.transform
+            .Rotate(0, 0, rotationSpeed * Time.deltaTime * (Mathf.Abs(axisX) + 1));
 
     private void Drop()
     {
