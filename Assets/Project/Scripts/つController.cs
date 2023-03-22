@@ -51,7 +51,7 @@ public class つController : MonoBehaviour
     {
         var movement = x * moveSpeed *Time.deltaTime;
         var posX = currentつ.transform.position.x + movement;
-        posX = Mathf.Clamp(posX, -4, 4);
+        posX = Mathf.Clamp(posX, -15, 15);
         currentつ.transform.position = new Vector3(posX, currentつ.transform.position.y, 0);
     }
 

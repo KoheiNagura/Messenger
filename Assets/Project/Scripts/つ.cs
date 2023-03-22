@@ -61,9 +61,8 @@ public class つ : MonoBehaviour {
     public void SetPt(int pt)
     {
         this.pt = pt;
-        // とりあえず仮置き
-        var size = new Vector3(pt, pt, 0) / 100;
-        transform.localScale = new Vector3(0.15f, 0.15f, 0) + size;
+        var size = new Vector3(pt, pt, 0) / 100 + new Vector3(0, 0, 1);
+        transform.localScale = size;
     }
 
     public void SetSprite(Sprite sprite) 
@@ -89,7 +88,7 @@ public class つ : MonoBehaviour {
     private bool IsOutOfBounds()
     {
         // 画面の下端から-1した位置とかから範囲外にしたい。
-        return transform.position.y < -5;
+        return transform.position.y < -25;
     }
 
     private bool IsMoving()
@@ -99,6 +98,6 @@ public class つ : MonoBehaviour {
     {
         if (isDroping) return false;
         if (velocities.Count < 5) return false;
-        return (velocities.Select(i => i.magnitude).Average() < 0.01f);
+        return (velocities.Select(i => i.magnitude).Average() < 0.05f);
     }
 }
