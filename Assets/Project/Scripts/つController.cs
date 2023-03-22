@@ -9,6 +9,7 @@ public class つController : MonoBehaviour
     [SerializeField] private つ つPrefab;
     [SerializeField] private float rotationSpeed, moveSpeed;
     [SerializeField] private Sprite[] sprites;
+    [SerializeField] private InGameView view;
     private つ currentつ, lastDroppedつ;
     private float axisX = 0;
 
@@ -44,6 +45,7 @@ public class つController : MonoBehaviour
         currentつ.transform.position = Vector3.up * 18;
         currentつ.SetPt(Random.Range(100, 300));
         var sprite = GetRandomSpriつ();
+        view.SetFontNameLabel(sprite.name);
         currentつ.SetSprite(sprite);
     }
 
