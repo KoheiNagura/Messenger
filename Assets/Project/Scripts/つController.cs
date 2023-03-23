@@ -10,6 +10,7 @@ public class つController : MonoBehaviour
     [SerializeField] private float rotationSpeed, moveSpeed;
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private InGameView view;
+    [SerializeField] private RandomFontSizeTable randomTable;
     private つ currentつ, lastDroppedつ;
     private float axisX = 0;
 
@@ -43,7 +44,7 @@ public class つController : MonoBehaviour
     {
         currentつ = Instantiate(つPrefab);
         currentつ.transform.position = Vector3.up * 18;
-        currentつ.SetPt(Random.Range(100, 300));
+        currentつ.SetPt(randomTable.GetValue());
         var sprite = GetRandomSpriつ();
         view.SetFontNameLabel(sprite.name);
         currentつ.SetSprite(sprite);
