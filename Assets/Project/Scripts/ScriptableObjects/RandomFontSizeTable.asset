@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05aff8b1aafeb794c9cc06510598b0e6, type: 3}
+  m_Name: RandomFontSizeTable
+  m_EditorClassIdentifier: 
+  tableData:
+  - min: 100
+    max: 150
+    weight: 100
+  - min: 110
+    max: 150
+    weight: 100
+  - min: 110
+    max: 150
+    weight: 100
+  - min: 120
+    max: 150
+    weight: 100
+  - min: 130
+    max: 150
+    weight: 100
+  - min: 200
+    max: 300
+    weight: 100
+  - min: 130
+    max: 200
+    weight: 70
+  - min: 150
+    max: 200
+    weight: 70
+  - min: 175
+    max: 200
+    weight: 70
+  - min: 100
+    max: 200
+    weight: 30
+  - min: 100
+    max: 300
+    weight: 30
+  - min: 200
+    max: 300
+    weight: 30
+  - min: 200
+    max: 300
+    weight: 30
+  - min: 100
+    max: 300
+    weight: 30
+  - min: 100
+    max: 300
+    weight: 30
