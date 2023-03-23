@@ -6,7 +6,7 @@
     <title>Unity WebGL Player | Messenger</title>
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=630 height=891 style="width: 630px; height: 891px; background: #231F20"></canvas>
+    <canvas id="unity-canvas" width=420 height=594 style="width: 420px; height: 594px; background: #231F20"></canvas>
     <script src="Build/docs.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -25,9 +25,9 @@
       }
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "Build/docs.data",
-        frameworkUrl: "Build/docs.framework.js",
-        codeUrl: "Build/docs.wasm",
+        dataUrl: "Build/docs.data.gz",
+        frameworkUrl: "Build/docs.framework.js.gz",
+        codeUrl: "Build/docs.wasm.gz",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Messenger",
