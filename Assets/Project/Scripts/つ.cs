@@ -98,6 +98,12 @@ public class つ : MonoBehaviour {
     {
         if (isDroping) return false;
         if (velocities.Count < 5) return false;
-        return (velocities.Select(i => i.magnitude).Average() < 0.05f);
+        if (velocities.Select(i => i.magnitude).Average() < 0.05f)
+            return true;
+        var average = velocities.Select(i => i.magnitude).Average();
+        var averageDeviation = velocities
+            .Select(i => Mathf.Abs(i.magnitude - average))
+            .Average();
+        return (averageDeviation < 0.03f);
     }
 }
