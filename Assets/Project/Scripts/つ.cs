@@ -8,6 +8,7 @@ using System.Linq;
 [RequireComponent(typeof(SpriteRenderer), typeof(PolygonCollider2D), typeof(Rigidbody2D))]
 public class つ : MonoBehaviour {
     public int pt { get; private set; }
+    public Sprite sprite => renderer.sprite;
     public IObservable<Collision2D> OnHitOtherつ;
     public IObservable<つ> OnOutOfBounds;
     public IObservable<つ> OnStopped;

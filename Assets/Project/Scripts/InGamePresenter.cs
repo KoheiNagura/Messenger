@@ -61,6 +61,7 @@ public class InGamePresenter : MonoBehaviour
         (lastScreenShot, _) = await UniTask.WhenAll(
             ScreenRecorder.GetTexture(Camera.main),
             camera.MoveCameraIfNeeded().AsAsyncUnitUniTask());
+        model.AddStacked(stopped.sprite, stopped.pt);
         Generaつ();
     }
 
@@ -72,6 +73,7 @@ public class InGamePresenter : MonoBehaviour
         {
             GameOver();
         }
+        model.RemoveStacked(dropped.sprite, dropped.pt);
         // テスト用
         if (controller.Currentつ != null) return;
         Generaつ();
