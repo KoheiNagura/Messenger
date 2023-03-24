@@ -13,9 +13,11 @@ public class つController : MonoBehaviour
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private InGameView view;
     [SerializeField] private RandomFontSizeTable randomTable;
+
     private つ currentつ, lastDroppedつ;
     private float axisX = 0;
     private float cameraDistanceY = 15;
+    private Texture2D lastScreenShot;
 
     private void Awake()
     {
@@ -111,6 +113,7 @@ public class つController : MonoBehaviour
     private async void OnStopped()
     {
         if (currentつ != null) return;
+        lastScreenShot = await ScreenRecorder.GetTexture(Camera.main, false);
         await MoveCameraIfNeeded();
         Generaつ();
     }
