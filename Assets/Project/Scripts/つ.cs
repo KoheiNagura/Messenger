@@ -9,8 +9,8 @@ using System.Linq;
 public class つ : MonoBehaviour {
     public int pt { get; private set; }
     public IObservable<Collision2D> OnHitOtherつ;
-    public IObservable<Unit> OnOutOfBounds;
-    public IObservable<Unit> OnStopped;
+    public IObservable<つ> OnOutOfBounds;
+    public IObservable<つ> OnStopped;
 
     private PolygonCollider2D collider;
     private SpriteRenderer renderer;
@@ -37,9 +37,11 @@ public class つ : MonoBehaviour {
         OnHitOtherつ = this.OnCollisionEnter2DAsObservable()
             .Where(i => i.collider.tag == "つ");
         OnOutOfBounds = this.UpdateAsObservable()
+            .Select(_ => this)
             .Where(_ => IsMoving() && IsOutOfBounds())
             .Take(1);
         OnStopped = this.UpdateAsObservable()
+            .Select(_ => this)
             .Where(_ => !isDroping && IsStopping())
             .Take(1);
         velocityObservable = Observable.Interval(TimeSpan.FromSeconds(.1f))
