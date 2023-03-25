@@ -40,7 +40,12 @@ public class InGamePresenter : MonoBehaviour, IPresenter
 
     public async UniTask Open()
     {
-        await UniTask.WhenAll(view.PlayTween(), view.PlayNexつTween());
+        (lastScreenShot, _, _) = await UniTask
+            .WhenAll(
+                ScreenRecorder.GetTexture(Camera.main),
+                view.PlayTween().AsAsyncUnitUniTask(),
+                view.PlayNexつTween().AsAsyncUnitUniTask()
+            );
         GameStart();
         isActivate = true;
     }
