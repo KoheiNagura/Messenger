@@ -15,7 +15,7 @@ public class InGamePresenter : MonoBehaviour, IPresenter
     [SerializeField] private つController controller;
 
     private Texture2D lastScreenShot;
-    private int lifeCount, maxLifeCount = 3;
+    private int lifeCount, maxLifeCount = 1;
     private (Sprite sprite, int pt) currentつData;
 
     private async void Start()
@@ -33,6 +33,7 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         camera.ResetPosition();
         view.SetLifeLabel(lifeCount);
         view.SetFontNameLabel("");
+        view.SetTotalPt(0);
         currentつData = model.GetNextつ();
         view.SetNexつValue(model.NextつData.sprite, model.NextつData.pt);
     }
@@ -111,6 +112,7 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         currentつData = model.GetNextつ();
         view.SetFontNameLabel(currentつData.sprite.name);
         view.SetNexつValue(model.NextつData.sprite, model.NextつData.pt);
+        view.SetTotalPt(model.TotalPt);
     }
 
     private async void OnStopped(つ stopped)
