@@ -86,7 +86,7 @@ public class InGamePresenter : MonoBehaviour, IPresenter
             ScreenRecorder.GetTexture(Camera.main),
             camera.MoveCameraIfNeeded().AsAsyncUnitUniTask());
         model.AddStacked(stopped.sprite, stopped.pt);
-        Generaつ();
+        if (controller.Currentつ == null) Generaつ();
     }
 
     private void OnOutOfBounds(つ dropped)
