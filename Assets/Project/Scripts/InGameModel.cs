@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public class InGameModel : MonoBehaviour
 {
+    public (Sprite sprite, int pt) NextつData { get; private set; }
+    public int TotalPt => stacks.Sum(i => i.pt);
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private RandomFontSizeTable randomTable;
-    public (Sprite sprite, int pt) NextつData { get; private set; }
     private List<StackedつData> stacks;
 
     public void Initialzie()
