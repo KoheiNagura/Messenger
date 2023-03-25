@@ -20,19 +20,21 @@ public class つController : MonoBehaviour
 
     private つ lastDroppedつ;
     private float axisX = 0;
+    private Transform parent;
     private Subject<つ> onStoppedSubject, onOutOfBoundsSubject;
     private ReactiveProperty<bool> isInteractingProperty;
 
     private void Awake()
     {
         SubscribeObservables();
+        parent = new GameObject("つParent").transform;
     }
 
     public void Reset()
     {
         Currentつ = null;
         lastDroppedつ = null;
-        foreach (Transform child in transform)
+        foreach (Transform child in parent)
         {
             Destroy(child.gameObject);
         }
@@ -65,7 +67,7 @@ public class つController : MonoBehaviour
     public void Generaつ(Sprite sprite, Vector2 position, int pt)
     {
         Currentつ = Instantiate(つPrefab);
-        Currentつ.transform.SetParent(transform);
+        Currentつ.transform.SetParent(parent);
         Currentつ.transform.position = position;
         Currentつ.SetPt(pt);
         Currentつ.SetSprite(sprite);
