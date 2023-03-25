@@ -10,7 +10,7 @@ using UniRx;
 public class InGameView : MonoBehaviour
 {
     public IObservable<Unit> OnClickNexつ => nexつ.onClick.AsObservable();
-    [SerializeField] private Text fontNameLabel, lifeLabel;
+    [SerializeField] private Text fontNameLabel, lifeLabel, totalPtLabel;
     [SerializeField] private NexつComponent nexつ;
     private Sequence fadeInSequence;
 
@@ -44,6 +44,9 @@ public class InGameView : MonoBehaviour
 
     public void SetLifeLabel(int life)
         => lifeLabel.text = $"いのち\n{life}つ";
+
+    public void SetTotalPt(int pt)
+        => totalPtLabel.text = $"{pt:#,0}pt";
 
     public async UniTask PlayNexつTween(bool playBackwards = false)
         => await nexつ.PlayTween(playBackwards);
