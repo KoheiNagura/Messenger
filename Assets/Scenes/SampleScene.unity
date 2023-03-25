@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -1761,6 +1761,22 @@ PrefabInstance:
       propertyPath: resultPresenter
       value: 
       objectReference: {fileID: 209336723761618747}
+    - target: {fileID: 4267452632839148656, guid: eb6557c26acc00f45b60f31d0641ef7b, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4267452632839148656, guid: eb6557c26acc00f45b60f31d0641ef7b, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4267452632839148656, guid: eb6557c26acc00f45b60f31d0641ef7b, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054297323483708541, guid: eb6557c26acc00f45b60f31d0641ef7b, type: 3}
+      propertyPath: m_Color.a
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 8854441076480719092, guid: eb6557c26acc00f45b60f31d0641ef7b, type: 3}
       propertyPath: m_Name
       value: InGameView

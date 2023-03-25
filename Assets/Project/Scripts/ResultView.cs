@@ -5,6 +5,7 @@ using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using System;
+using TMPro;
 
 public class ResultView : MonoBehaviour
 {
@@ -17,14 +18,24 @@ public class ResultView : MonoBehaviour
         }
     }
 
+    public bool isAvailableShare => shareButton.isAvailable;
+
     public IObservable<Unit> OnClickBackground
         => background.OnClickAsObservable().Where(_ => isInteractable);
+    public IObservable<Unit> OnClickShare
+        => shareButton.onClickShare.AsObservable().Where(_ => isInteractable);
+    public IObservable<Unit> OnClickTweet
+        => shareButton.onClickTweet.AsObservable()
+            .Where(_ => isInteractable && shareButton.isAvailable);
+    public IObservable<Unit> OnClickMisskey
+        => shareButton.onClickMisskey.AsObservable()
+            .Where(_ => isInteractable && shareButton.isAvailable);
 
     private Sequence fadeInSequence;
     [SerializeField] private Button background;
     [SerializeField] private RectTransform wrapper;
     [SerializeField] private ShareButtonComponent shareButton;
-    [SerializeField] private Text totalPtLabel;
+    [SerializeField] private TextMeshProUGUI totalPtLabel;
     [SerializeField] private RawImage screenShotImage;
     [SerializeField] private StackedListComponent stackedList;
 
@@ -63,4 +74,16 @@ public class ResultView : MonoBehaviour
 
     public void SetStackedList(IList<(int usedCount, Sprite sprite, string fontFamily)> stacks)
         => stackedList.SetValue(stacks);
+
+    public void SetLaycastTarget(bool isOn)
+        => background.targetGraphic.raycastTarget = isOn;
+
+    public void CloseShare()
+        => shareButton.Close();
+
+    public void ToggleOpenShare()
+        => shareButton.ToggleOpen();
+
+    public void SetShareAvilable(bool value)
+        => shareButton.SetAvailable(value);
 }
