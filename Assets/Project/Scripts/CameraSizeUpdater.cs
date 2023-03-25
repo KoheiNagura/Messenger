@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Camera)), ExecuteInEditMode]
+[RequireComponent(typeof(Camera)), ExecuteAlways]
 public class CameraSizeUpdater : MonoBehaviour
 {
     [SerializeField] private float baseHeight;

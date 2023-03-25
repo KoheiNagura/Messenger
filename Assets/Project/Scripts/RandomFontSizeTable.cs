@@ -16,7 +16,7 @@ public class RandomFontSizeTable : ScriptableObject
 
     private List<WeightTableData> usedTableData;
 
-    private void Awake()
+    public void Initialize()
     {
         usedTableData = new List<WeightTableData>();
     }

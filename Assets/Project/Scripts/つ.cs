@@ -8,9 +8,10 @@ using System.Linq;
 [RequireComponent(typeof(SpriteRenderer), typeof(PolygonCollider2D), typeof(Rigidbody2D))]
 public class つ : MonoBehaviour {
     public int pt { get; private set; }
+    public Sprite sprite => renderer.sprite;
     public IObservable<Collision2D> OnHitOtherつ;
-    public IObservable<Unit> OnOutOfBounds;
-    public IObservable<Unit> OnStopped;
+    public IObservable<つ> OnOutOfBounds;
+    public IObservable<つ> OnStopped;
 
     private PolygonCollider2D collider;
     private SpriteRenderer renderer;
@@ -37,9 +38,11 @@ public class つ : MonoBehaviour {
         OnHitOtherつ = this.OnCollisionEnter2DAsObservable()
             .Where(i => i.collider.tag == "つ");
         OnOutOfBounds = this.UpdateAsObservable()
+            .Select(_ => this)
             .Where(_ => IsMoving() && IsOutOfBounds())
             .Take(1);
         OnStopped = this.UpdateAsObservable()
+            .Select(_ => this)
             .Where(_ => !isDroping && IsStopping())
             .Take(1);
         velocityObservable = Observable.Interval(TimeSpan.FromSeconds(.1f))
@@ -98,6 +101,12 @@ public class つ : MonoBehaviour {
     {
         if (isDroping) return false;
         if (velocities.Count < 5) return false;
-        return (velocities.Select(i => i.magnitude).Average() < 0.05f);
+        if (velocities.Select(i => i.magnitude).Average() < 0.05f)
+            return true;
+        var average = velocities.Select(i => i.magnitude).Average();
+        var averageDeviation = velocities
+            .Select(i => Mathf.Abs(i.magnitude - average))
+            .Average();
+        return (averageDeviation < 0.03f);
     }
 }
