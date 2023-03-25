@@ -5,6 +5,20 @@ using Cysharp.Threading.Tasks;
 public class CameraController : MonoBehaviour
 {
     private readonly float cameraDistanceY = 15;
+    private float defaultCameraPosY;
+
+    private void Awake()
+    {
+        var position = Camera.main.transform.position;
+        defaultCameraPosY = position.y;
+    }
+
+    public void ResetPosition()
+    {
+        var position = Camera.main.transform.position;
+        position.y = defaultCameraPosY;
+        Camera.main.transform.position = position;
+    }
 
     public async UniTask MoveCameraIfNeeded()
     {

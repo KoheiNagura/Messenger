@@ -4,36 +4,57 @@ using System;
 using UniRx;
 using Cysharp.Threading.Tasks;
 
-public class InGamePresenter : MonoBehaviour
+public class InGamePresenter : MonoBehaviour, IPresenter
 {
+    public bool isActivate { get; private set; }
+
     [SerializeField] private InGameView view;
+    [SerializeField] private ResultPresenter resultPresenter;
     [SerializeField] private InGameModel model;
     [SerializeField] private CameraController camera;
     [SerializeField] private つController controller;
 
     private Texture2D lastScreenShot;
-    private int lifeCount = 3;
+    private int lifeCount, maxLifeCount = 3;
 
     private async void Start()
     {
         SubscribeObservables();
+        Initialize();
+        await Open();
+    }
+
+    public void Initialize()
+    {
+        lifeCount = maxLifeCount;
+        model.Initialzie();
+        controller.Reset();
+        camera.ResetPosition();
+        view.SetLifeLabel(lifeCount);
+    }
+
+    public async UniTask Open()
+    {
+        isActivate = true;
         // UIアニメーション待機
         GameStart();
+    }
+
+    public async UniTask Close()
+    {
+        isActivate = false;
     }
 
     private void SubscribeObservables()
     {
         controller.OnStopped
+            .Where(_ => isActivate)
             .Subscribe(OnStopped)
             .AddTo(gameObject);
         controller.OnOutOfBounds
+            .Where(_ => isActivate)
             .Subscribe(OnOutOfBounds)
             .AddTo(gameObject);
-    }
-
-    private async UniTask OpenTweenAnimation()
-    {
-
     }
 
     private void GameStart()
@@ -41,9 +62,12 @@ public class InGamePresenter : MonoBehaviour
         Generaつ();
     }
 
-    private void GameOver()
+    private async void GameOver()
     {
-
+        var result = model.GetResult(lastScreenShot);
+        resultPresenter.SetupView(result);
+        await Close();
+        await resultPresenter.Open();
     }
 
     private void Generaつ()
@@ -69,13 +93,11 @@ public class InGamePresenter : MonoBehaviour
     {
         lifeCount--;
         view.SetLifeLabel(lifeCount);
+        model.RemoveStacked(dropped.sprite, dropped.pt);
         if (lifeCount < 1)
         {
             GameOver();
-        }
-        model.RemoveStacked(dropped.sprite, dropped.pt);
-        // テスト用
-        if (controller.Currentつ != null) return;
-        Generaつ();
+        } 
+        else if (controller.Currentつ == null) Generaつ();
     }
 }

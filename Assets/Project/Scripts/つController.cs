@@ -28,6 +28,16 @@ public class つController : MonoBehaviour
         SubscribeObservables();
     }
 
+    public void Reset()
+    {
+        Currentつ = null;
+        lastDroppedつ = null;
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     private void SubscribeObservables()
     {
         this.OnKeyAsObservable(KeyCode.Space)

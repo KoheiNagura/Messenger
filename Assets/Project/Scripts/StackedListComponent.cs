@@ -11,7 +11,7 @@ public class StackedListComponent : MonoBehaviour
     {
         var cellCount = stacks.Count > MIN_CELL_COUNT
             ? stacks.Count + 2
-            : MIN_CELL_COUNT;
+            : MIN_CELL_COUNT + 2;
         for (var i = 0; i < cellCount; i++)
         {
             var cell = Instantiate(cellPrefab);

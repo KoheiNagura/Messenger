@@ -4,10 +4,15 @@ using System.Collections.Generic;
 
 public class InGameModel : MonoBehaviour
 {
-    private List<StackedつData> stacks = new List<StackedつData>();
-
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private RandomFontSizeTable randomTable;
+    private List<StackedつData> stacks;
+
+    public void Initialzie()
+    {
+        randomTable.Initialize();
+        stacks = new List<StackedつData>();
+    }
 
     public Sprite GetRandomSprite()
     {

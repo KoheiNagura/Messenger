@@ -2,26 +2,15 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using UniRx;
+using Cysharp.Threading.Tasks;
 
-public class ResultPresenter : MonoBehaviour
+public class ResultPresenter : MonoBehaviour, IPresenter
 {
+    public bool isActivate { get; private set; }
     [SerializeField] private ResultView view;
+    [SerializeField] private InGamePresenter inGamePresenter;
 
-    private void Awake()
-    {
-        var stacks = new List<StackedつData>() {
-            new StackedつData(null, "テスト1", 5),
-            new StackedつData(null, "テスト1", 5),
-            new StackedつData(null, "テスト1", 5),
-            new StackedつData(null, "テスト2", 5),
-            new StackedつData(null, "テスト2", 5),
-            new StackedつData(null, "テスト3", 5),
-        };
-        var result = new GameResult(stacks, null);
-        SetupView(result);
-    }
-
-    private void SetupView(GameResult result)
+    public void SetupView(GameResult result)
     {
         view.SetTotalPt(result.TotalPt);
         view.SetScreenShot(result.ScreenShot);
@@ -32,7 +21,27 @@ public class ResultPresenter : MonoBehaviour
             .ToList();
         view.SetStackedList(stacks);
         view.OnClickBackground
-            .Subscribe(_ => view.PlayTween(true))
+            .Where(_ => isActivate)
+            .Subscribe(_ => BackToInGame())
             .AddTo(gameObject);
+    }
+
+    public async UniTask Open()
+    {
+        isActivate = true;
+        await view.PlayTween();
+    }
+
+    public async UniTask Close()
+    {
+        isActivate = false;
+        await view.PlayTween(true);
+    }
+
+    public async void BackToInGame()
+    {
+        inGamePresenter.Initialize();
+        await Close();
+        await inGamePresenter.Open();
     }
 }
