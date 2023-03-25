@@ -215,7 +215,7 @@ MonoBehaviour:
   shareButton: {fileID: 3761953749570969895}
   tweetButton: {fileID: 5777616014470485220}
   misskeyButton: {fileID: 9198366373091711102}
-  buttonsParent: {fileID: 5797748207865797627}
+  buttonsGroup: {fileID: 1797275048127030509}
 --- !u!1 &810445438645480732
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   view: {fileID: 5780542943434035280}
   inGamePresenter: {fileID: 0}
+  uploader: {fileID: 0}
 --- !u!1 &2292277863401007216
 GameObject:
   m_ObjectHideFlags: 0
@@ -719,7 +720,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -92}
-  m_SizeDelta: {x: 56, y: 56}
+  m_SizeDelta: {x: 0, y: 56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2691493233377437606
 CanvasRenderer:
@@ -1345,7 +1346,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -28}
-  m_SizeDelta: {x: 56, y: 56}
+  m_SizeDelta: {x: 0, y: 56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3119314005730078689
 CanvasRenderer:
@@ -2686,6 +2687,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5797748207865797627}
   - component: {fileID: 7787910973649111359}
+  - component: {fileID: 1797275048127030509}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -2741,6 +2743,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!225 &1797275048127030509
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8578299760499062124}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8784841471665488054
 GameObject:
   m_ObjectHideFlags: 0

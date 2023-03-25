@@ -18,14 +18,18 @@ public class ResultView : MonoBehaviour
         }
     }
 
+    public bool isAvailableShare => shareButton.isAvailable;
+
     public IObservable<Unit> OnClickBackground
         => background.OnClickAsObservable().Where(_ => isInteractable);
     public IObservable<Unit> OnClickShare
         => shareButton.onClickShare.AsObservable().Where(_ => isInteractable);
     public IObservable<Unit> OnClickTweet
-        => shareButton.onClickTweet.AsObservable().Where(_ => isInteractable);
+        => shareButton.onClickTweet.AsObservable()
+            .Where(_ => isInteractable && shareButton.isAvailable);
     public IObservable<Unit> OnClickMisskey
-        => shareButton.onClickMisskey.AsObservable().Where(_ => isInteractable);
+        => shareButton.onClickMisskey.AsObservable()
+            .Where(_ => isInteractable && shareButton.isAvailable);
 
     private Sequence fadeInSequence;
     [SerializeField] private Button background;
@@ -79,4 +83,7 @@ public class ResultView : MonoBehaviour
 
     public void ToggleOpenShare()
         => shareButton.ToggleOpen();
+
+    public void SetShareAvilable(bool value)
+        => shareButton.SetAvailable(value);
 }
