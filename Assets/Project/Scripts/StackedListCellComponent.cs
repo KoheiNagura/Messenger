@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class StackedListCellComponent : MonoBehaviour
 {
-    [SerializeField] private Text usedCountLabel;
+    [SerializeField] private TextMeshProUGUI usedCountLabel;
     [SerializeField] private Image fontImage;
-    [SerializeField] private Text fontFamilyLabel;
+    [SerializeField] private TextMeshProUGUI fontFamilyLabel;
 
     public void SetValue(int usedCount, Sprite sprite, string fontFamily)
     {

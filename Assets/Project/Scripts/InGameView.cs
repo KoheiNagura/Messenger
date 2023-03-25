@@ -6,11 +6,12 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System;
 using UniRx;
+using TMPro;
 
 public class InGameView : MonoBehaviour
 {
     public IObservable<Unit> OnClickNexつ => nexつ.onClick.AsObservable();
-    [SerializeField] private Text fontNameLabel, lifeLabel, totalPtLabel;
+    [SerializeField] private TextMeshProUGUI fontNameLabel, lifeLabel, totalPtLabel;
     [SerializeField] private NexつComponent nexつ;
     private Sequence fadeInSequence;
 

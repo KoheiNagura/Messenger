@@ -5,6 +5,7 @@ using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using System;
+using TMPro;
 
 public class ResultView : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class ResultView : MonoBehaviour
     [SerializeField] private Button background;
     [SerializeField] private RectTransform wrapper;
     [SerializeField] private ShareButtonComponent shareButton;
-    [SerializeField] private Text totalPtLabel;
+    [SerializeField] private TextMeshProUGUI totalPtLabel;
     [SerializeField] private RawImage screenShotImage;
     [SerializeField] private StackedListComponent stackedList;
 
