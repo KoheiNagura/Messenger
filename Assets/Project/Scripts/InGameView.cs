@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using System;
+using UniRx;
 
 public class InGameView : MonoBehaviour
 {
+    public IObservable<Unit> OnClickNexつ => nexつ.onClick.AsObservable();
     [SerializeField] private Text fontNameLabel, lifeLabel;
     [SerializeField] private NexつComponent nexつ;
     private Sequence fadeInSequence;

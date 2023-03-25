@@ -16,6 +16,7 @@ public class InGamePresenter : MonoBehaviour, IPresenter
 
     private Texture2D lastScreenShot;
     private int lifeCount, maxLifeCount = 3;
+    private (Sprite sprite, int pt) currentつData;
 
     private async void Start()
     {
@@ -32,6 +33,8 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         camera.ResetPosition();
         view.SetLifeLabel(lifeCount);
         view.SetFontNameLabel("");
+        currentつData = model.GetNextつ();
+        view.SetNexつValue(model.NextつData.sprite, model.NextつData.pt);
     }
 
     public async UniTask Open()
@@ -61,6 +64,13 @@ public class InGamePresenter : MonoBehaviour, IPresenter
             .Where(_ => isActivate)
             .Subscribe(i => view.PlayNexつTween(i).AsAsyncUnitUniTask())
             .AddTo(gameObject);
+        view.OnClickNexつ
+            .Subscribe(_ => print("clk"))
+            .AddTo(gameObject);
+        view.OnClickNexつ
+            .Where(_ => isActivate && !controller.IsInteracting.Value)
+            .Subscribe(_ => Swapつ())
+            .AddTo(gameObject);
     }
 
     private void GameStart()
@@ -80,10 +90,27 @@ public class InGamePresenter : MonoBehaviour, IPresenter
     {
         var screenTop = camera.GetScreenTopPosition();
         var position = Vector3.up * (screenTop.y - 4);
-        var sprite = model.GetRandomSprite();
-        var pt = model.GetFontSize();
-        controller.Generaつ(sprite, position, pt);
-        view.SetFontNameLabel(sprite.name);
+        controller.Generaつ(currentつData.sprite, position, currentつData.pt);
+    }
+
+    private async void Swapつ()
+    {
+        Destroy(controller.Currentつ.gameObject);
+        currentつData = model.SwapNextつ(currentつData.sprite, currentつData.pt);
+        var screenTop = camera.GetScreenTopPosition();
+        var position = Vector3.up * (screenTop.y - 4);
+        await view.PlayNexつTween(true);
+        controller.Generaつ(currentつData.sprite, position, currentつData.pt);
+        view.SetFontNameLabel(currentつData.sprite.name);
+        view.SetNexつValue(model.NextつData.sprite, model.NextつData.pt);
+        await view.PlayNexつTween();
+    }
+
+    private void UpdateView()
+    {
+        currentつData = model.GetNextつ();
+        view.SetFontNameLabel(currentつData.sprite.name);
+        view.SetNexつValue(model.NextつData.sprite, model.NextつData.pt);
     }
 
     private async void OnStopped(つ stopped)
@@ -92,7 +119,11 @@ public class InGamePresenter : MonoBehaviour, IPresenter
             ScreenRecorder.GetTexture(Camera.main),
             camera.MoveCameraIfNeeded().AsAsyncUnitUniTask());
         model.AddStacked(stopped.sprite, stopped.pt);
-        if (controller.Currentつ == null) Generaつ();
+        if (controller.Currentつ == null)
+        {
+            UpdateView();
+            Generaつ();
+        }
     }
 
     private void OnOutOfBounds(つ dropped)
@@ -104,6 +135,10 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         {
             GameOver();
         } 
-        else if (controller.Currentつ == null) Generaつ();
+        else if (controller.Currentつ == null) 
+        {
+            UpdateView();
+            Generaつ();
+        }
     }
 }

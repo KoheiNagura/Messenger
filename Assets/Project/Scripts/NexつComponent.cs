@@ -34,7 +34,7 @@ public class NexつComponent : MonoBehaviour {
         if (fadeInSequence == null)
         {
             fadeInSequence = DOTween.Sequence()
-                .Append(rect.DOAnchorPos(Vector2.zero, .5f).SetEase(Ease.OutBack))
+                .Append(rect.DOAnchorPos(Vector2.zero, .5f).SetEase(Ease.OutExpo))
                 .SetAutoKill(false);
         }
         fadeInSequence.timeScale = 1f;

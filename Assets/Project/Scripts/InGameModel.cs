@@ -6,18 +6,34 @@ public class InGameModel : MonoBehaviour
 {
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private RandomFontSizeTable randomTable;
+    public (Sprite sprite, int pt) NextつData { get; private set; }
     private List<StackedつData> stacks;
 
     public void Initialzie()
     {
         randomTable.Initialize();
         stacks = new List<StackedつData>();
+        NextつData = (GetRandomSprite(), GetFontSize());
     }
 
     public Sprite GetRandomSprite()
     {
         // フォントも直近5件ぐらいは重複なしにしたいかも
         return sprites.OrderBy(_ => System.Guid.NewGuid()).First();
+    }
+
+    public (Sprite sprite, int pt) GetNextつ()
+    {
+        var data = NextつData;
+        NextつData = (GetRandomSprite(), GetFontSize());
+        return data;
+    }
+
+    public (Sprite sprite, int pt) SwapNextつ(Sprite sprite, int pt)
+    {
+        var data = NextつData;
+        NextつData = (sprite, pt);
+        return data;
     }
 
     public int GetFontSize(bool excludeDuplicates = true)
