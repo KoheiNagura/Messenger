@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using UniRx;
 
 public class ResultPresenter : MonoBehaviour
 {
@@ -30,5 +31,8 @@ public class ResultPresenter : MonoBehaviour
             .OrderByDescending(i => i.Item1)
             .ToList();
         view.SetStackedList(stacks);
+        view.OnClickBackground
+            .Subscribe(_ => view.PlayTween(true))
+            .AddTo(gameObject);
     }
 }

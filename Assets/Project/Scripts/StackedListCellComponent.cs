@@ -11,6 +11,7 @@ public class StackedListCellComponent : MonoBehaviour
     {
         usedCountLabel.text = usedCount > 0 ? $"{usedCount}" : "";
         fontImage.sprite = sprite;
+        fontImage.enabled = sprite != null;
         fontFamilyLabel.text = $"{fontFamily}";
     }
 }
