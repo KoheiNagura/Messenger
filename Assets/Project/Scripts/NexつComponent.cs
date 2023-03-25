@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using TMPro;
 
 public class NexつComponent : MonoBehaviour {
     public UnityEvent onClick => button.onClick;
@@ -17,7 +18,7 @@ public class NexつComponent : MonoBehaviour {
 
     [SerializeField] private Button button;
     [SerializeField] private Image つImage;
-    [SerializeField] private Text ptLabel;
+    [SerializeField] private TextMeshProUGUI ptLabel;
     private RectTransform rect => (RectTransform)this.transform;
     private Sequence fadeInSequence;
 
