@@ -9,6 +9,7 @@ public class StackedListComponent : MonoBehaviour
 
     public void SetValue(IList<(int usedCount, Sprite sprite, string fontFamily)> stacks)
     {
+        DestroyCells();
         var cellCount = stacks.Count > MIN_CELL_COUNT
             ? stacks.Count + 2
             : MIN_CELL_COUNT + 2;
@@ -25,6 +26,14 @@ public class StackedListComponent : MonoBehaviour
             {
                 cell.SetValue(0, null, "");
             }
+        }
+    }
+
+    public void DestroyCells()
+    {
+        foreach (Transform child in contentParent)
+        {
+            Destroy(child.gameObject);
         }
     }
 }
