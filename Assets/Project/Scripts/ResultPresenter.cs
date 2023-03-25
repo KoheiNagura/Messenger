@@ -10,6 +10,11 @@ public class ResultPresenter : MonoBehaviour, IPresenter
     [SerializeField] private ResultView view;
     [SerializeField] private InGamePresenter inGamePresenter;
 
+    private void Start()
+    {
+        SubscribeObservables();
+    }
+    
     public void SetupView(GameResult result)
     {
         view.SetTotalPt(result.TotalPt);
@@ -20,9 +25,25 @@ public class ResultPresenter : MonoBehaviour, IPresenter
             .OrderByDescending(i => i.Item1)
             .ToList();
         view.SetStackedList(stacks);
+    }
+
+    private void SubscribeObservables()
+    {
         view.OnClickBackground
             .Where(_ => isActivate)
             .Subscribe(_ => BackToInGame())
+            .AddTo(gameObject);
+        view.OnClickShare
+            .Where(_ => isActivate)
+            .Subscribe(_ => view.ToggleOpenShare())
+            .AddTo(gameObject);
+        view.OnClickTweet
+            .Where(_ => isActivate)
+            .Subscribe()
+            .AddTo(gameObject);
+        view.OnClickMisskey
+            .Where(_ => isActivate)
+            .Subscribe()
             .AddTo(gameObject);
     }
 
@@ -37,10 +58,11 @@ public class ResultPresenter : MonoBehaviour, IPresenter
     {
         isActivate = false;
         view.SetLaycastTarget(false);
+        view.CloseShare();
         await view.PlayTween(true);
     }
 
-    public async void BackToInGame()
+    private async void BackToInGame()
     {
         inGamePresenter.Initialize();
         await Close();

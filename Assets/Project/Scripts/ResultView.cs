@@ -19,6 +19,12 @@ public class ResultView : MonoBehaviour
 
     public IObservable<Unit> OnClickBackground
         => background.OnClickAsObservable().Where(_ => isInteractable);
+    public IObservable<Unit> OnClickShare
+        => shareButton.onClickShare.AsObservable().Where(_ => isInteractable);
+    public IObservable<Unit> OnClickTweet
+        => shareButton.onClickTweet.AsObservable().Where(_ => isInteractable);
+    public IObservable<Unit> OnClickMisskey
+        => shareButton.onClickMisskey.AsObservable().Where(_ => isInteractable);
 
     private Sequence fadeInSequence;
     [SerializeField] private Button background;
@@ -66,4 +72,10 @@ public class ResultView : MonoBehaviour
 
     public void SetLaycastTarget(bool isOn)
         => background.targetGraphic.raycastTarget = isOn;
+
+    public void CloseShare()
+        => shareButton.Close();
+
+    public void ToggleOpenShare()
+        => shareButton.ToggleOpen();
 }

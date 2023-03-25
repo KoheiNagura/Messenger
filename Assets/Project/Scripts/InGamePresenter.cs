@@ -32,9 +32,9 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         controller.Reset();
         camera.ResetPosition();
         view.SetLifeLabel(lifeCount);
-        view.SetFontNameLabel("");
         view.SetTotalPt(0);
         currentつData = model.GetNextつ();
+        view.SetFontNameLabel(currentつData.sprite.name);
         view.SetNexつValue(model.NextつData.sprite, model.NextつData.pt);
     }
 
