@@ -105,6 +105,7 @@ public class つController : MonoBehaviour
 
     private void Move(float x)
     {
+        isInteractingProperty.Value = true;
         var movement = x * moveSpeed *Time.deltaTime;
         var posX = Currentつ.transform.position.x + movement;
         posX = Mathf.Clamp(posX, -moveRange, moveRange);
