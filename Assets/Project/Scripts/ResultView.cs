@@ -63,4 +63,7 @@ public class ResultView : MonoBehaviour
 
     public void SetStackedList(IList<(int usedCount, Sprite sprite, string fontFamily)> stacks)
         => stackedList.SetValue(stacks);
+
+    public void SetLaycastTarget(bool isOn)
+        => background.targetGraphic.raycastTarget = isOn;
 }

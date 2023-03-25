@@ -30,11 +30,13 @@ public class ResultPresenter : MonoBehaviour, IPresenter
     {
         isActivate = true;
         await view.PlayTween();
+        view.SetLaycastTarget(true);
     }
 
     public async UniTask Close()
     {
         isActivate = false;
+        view.SetLaycastTarget(false);
         await view.PlayTween(true);
     }
 
