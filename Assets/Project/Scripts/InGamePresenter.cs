@@ -31,18 +31,20 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         controller.Reset();
         camera.ResetPosition();
         view.SetLifeLabel(lifeCount);
+        view.SetFontNameLabel("");
     }
 
     public async UniTask Open()
     {
-        isActivate = true;
-        // UIアニメーション待機
+        await UniTask.WhenAll(view.PlayTween(), view.PlayNexつTween());
         GameStart();
+        isActivate = true;
     }
 
     public async UniTask Close()
     {
         isActivate = false;
+        await UniTask.WhenAll(view.PlayTween(true), view.PlayNexつTween(true));
     }
 
     private void SubscribeObservables()
@@ -54,6 +56,10 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         controller.OnOutOfBounds
             .Where(_ => isActivate)
             .Subscribe(OnOutOfBounds)
+            .AddTo(gameObject);
+        controller.IsInteracting
+            .Where(_ => isActivate)
+            .Subscribe(i => view.PlayNexつTween(i).AsAsyncUnitUniTask())
             .AddTo(gameObject);
     }
 
