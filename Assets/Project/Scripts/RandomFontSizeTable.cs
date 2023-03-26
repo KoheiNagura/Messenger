@@ -29,7 +29,8 @@ public class RandomFontSizeTable : ScriptableObject
             : tableData;
         var data = WeightedPick(table);
         if (excludeDuplicates) usedTableData.Add(data);
-        return Random.Range(data.min, data.max + 1);
+        var value = Random.Range(data.min, data.max + 1);
+        return Mathf.RoundToInt(value / 5) * 5;
     }
 
     private WeightTableData WeightedPick(IEnumerable<WeightTableData> table)
