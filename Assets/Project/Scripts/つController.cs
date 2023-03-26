@@ -5,6 +5,7 @@ using UniRx.Triggers;
 using Cysharp.Threading.Tasks;
 using InputAsRx.Triggers;
 using System.Linq;
+using DG.Tweening;
 
 public class つController : MonoBehaviour 
 {
@@ -68,7 +69,8 @@ public class つController : MonoBehaviour
     {
         Currentつ = Instantiate(つPrefab);
         Currentつ.transform.SetParent(parent);
-        Currentつ.transform.position = position;
+        Currentつ.transform.position = position + Vector2.up * 10;
+        Currentつ.transform.DOMoveY(position.y, .2f);
         Currentつ.SetPt(pt);
         Currentつ.SetSprite(sprite);
     }
