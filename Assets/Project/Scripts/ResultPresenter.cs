@@ -75,6 +75,10 @@ public class ResultPresenter : MonoBehaviour, IPresenter
 
     private async void UploadScreenShot()
     {
+        // 一時的に無効
+        uploadedUrl = "";
+        view.SetShareAvilable(true);
+        return;
         var request = await uploader.UploadTexture(result.ScreenShot);
         uploadedUrl = request.result;
         if (uploadedUrl == "") return;
