@@ -71,9 +71,6 @@ public class InGamePresenter : MonoBehaviour, IPresenter
             .Subscribe(i => view.PlayNexつTween(i).AsAsyncUnitUniTask())
             .AddTo(gameObject);
         view.OnClickNexつ
-            .Subscribe(_ => print("clk"))
-            .AddTo(gameObject);
-        view.OnClickNexつ
             .Where(_ => isActivate && !controller.IsInteracting.Value)
             .Subscribe(_ => Swapつ())
             .AddTo(gameObject);

@@ -41,7 +41,6 @@ public class CameraController : MonoBehaviour
     public Vector3 GetHighestPosition()
     {
         var screenTop = GetScreenTopPosition().y + 10;
-        Debug.Log(screenTop);
         var origin = new Vector2(0, screenTop);
         var size = new Vector2(30, 10);
         var hit = Physics2D.BoxCast(origin, size, 0, Vector2.down, 100f);
