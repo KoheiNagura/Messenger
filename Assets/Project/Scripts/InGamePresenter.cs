@@ -15,7 +15,7 @@ public class InGamePresenter : MonoBehaviour, IPresenter
     [SerializeField] private つController controller;
 
     private Texture2D lastScreenShot;
-    private int lifeCount, maxLifeCount = 1;
+    private int lifeCount, maxLifeCount = 3;
     private (Sprite sprite, int pt) currentつData;
 
     private async void Start()
