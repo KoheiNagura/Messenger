@@ -18,7 +18,7 @@ public class ResultPresenter : MonoBehaviour, IPresenter
         SubscribeObservables();
     }
     
-    public async void SetupView(GameResult result)
+    public void SetupView(GameResult result)
     {
         this.result = result;
         view.SetTotalPt(result.TotalPt);
@@ -75,7 +75,8 @@ public class ResultPresenter : MonoBehaviour, IPresenter
 
     private async void UploadScreenShot()
     {
-        uploadedUrl = await uploader.UploadTexture(result.ScreenShot);
+        var request = await uploader.UploadTexture(result.ScreenShot);
+        uploadedUrl = request.result;
         if (uploadedUrl == "") return;
         view.SetShareAvilable(true);
     }
