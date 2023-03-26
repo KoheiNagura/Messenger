@@ -29,6 +29,7 @@ public class TitleView : MonoBehaviour {
     {
         rectGroup ??= taeruRect.GetComponent<CanvasGroup>();
         rectGroup.alpha = enable ? 1 : 0;
+        つRect.gameObject.SetActive(enable);
         background.gameObject.SetActive(enable);
     }
 
