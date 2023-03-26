@@ -48,11 +48,11 @@ public class ResultPresenter : MonoBehaviour, IPresenter
             .AddTo(gameObject);
         view.OnClickTweet
             .Where(_ => isActivate && view.isAvailableShare)
-            .Subscribe(_ => SharingManager.Tweet(result.TotalPt, uploadedUrl))
+            .Subscribe(_ => SharingManager.Tweet(result.Stacks.Count, result.TotalPt, uploadedUrl))
             .AddTo(gameObject);
         view.OnClickMisskey
             .Where(_ => isActivate && view.isAvailableShare)
-            .Subscribe(_ => SharingManager.Note(result.TotalPt, uploadedUrl))
+            .Subscribe(_ => SharingManager.Note(result.Stacks.Count, result.TotalPt, uploadedUrl))
             .AddTo(gameObject);
     }
 
