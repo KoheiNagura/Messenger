@@ -13,7 +13,7 @@ public class InGameView : MonoBehaviour
     public IObservable<Unit> OnClickNexつ => nexつ.onClick.AsObservable();
     [SerializeField] private TextMeshProUGUI fontNameLabel, lifeLabel, totalPtLabel;
     [SerializeField] private NexつComponent nexつ;
-    private Sequence fadeInSequence;
+    private Sequence fadeInSequence, labelFadeSequence;
 
     public async UniTask PlayTween(bool playBackwards = false)
     {
@@ -37,14 +37,33 @@ public class InGameView : MonoBehaviour
         await UniTask.WaitUntil(() => !fadeInSequence.IsPlaying());
     }
 
+    private void PlayLabelFadeTween(TextMeshProUGUI label)
+    {
+        var color = label.color;
+        color.a = 0.2f;
+        label.color = color;
+        DOTween.ToAlpha(
+            () => label.color,
+            c => label.color = c,
+            1,
+            .3f
+        );
+    }
+
     public void SetFontNameLabel(string name)
-        => fontNameLabel.text = name;
+    {
+        fontNameLabel.text = name;
+        PlayLabelFadeTween(fontNameLabel);
+    }
 
     public void SetNexつValue(Sprite sprite, int pt)
         => nexつ.SetValue(sprite, pt);
 
     public void SetLifeLabel(int life)
-        => lifeLabel.text = $"いのち\n{life}つ";
+    {
+        lifeLabel.text = $"いのち\n{life}つ";
+        PlayLabelFadeTween(lifeLabel);
+    }
 
     public void SetTotalPt(int pt)
         => totalPtLabel.text = $"{pt:#,0}pt";

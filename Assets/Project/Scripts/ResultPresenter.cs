@@ -18,7 +18,7 @@ public class ResultPresenter : MonoBehaviour, IPresenter
         SubscribeObservables();
     }
     
-    public async void SetupView(GameResult result)
+    public void SetupView(GameResult result)
     {
         this.result = result;
         view.SetTotalPt(result.TotalPt);
@@ -48,11 +48,11 @@ public class ResultPresenter : MonoBehaviour, IPresenter
             .AddTo(gameObject);
         view.OnClickTweet
             .Where(_ => isActivate && view.isAvailableShare)
-            .Subscribe(_ => SharingManager.Tweet(result.TotalPt, uploadedUrl))
+            .Subscribe(_ => SharingManager.Tweet(result.Stacks.Count, result.TotalPt, uploadedUrl))
             .AddTo(gameObject);
         view.OnClickMisskey
             .Where(_ => isActivate && view.isAvailableShare)
-            .Subscribe(_ => SharingManager.Note(result.TotalPt, uploadedUrl))
+            .Subscribe(_ => SharingManager.Note(result.Stacks.Count, result.TotalPt, uploadedUrl))
             .AddTo(gameObject);
     }
 
@@ -75,7 +75,12 @@ public class ResultPresenter : MonoBehaviour, IPresenter
 
     private async void UploadScreenShot()
     {
-        uploadedUrl = await uploader.UploadTexture(result.ScreenShot);
+        // 一時的に無効
+        uploadedUrl = "";
+        view.SetShareAvilable(true);
+        return;
+        var request = await uploader.UploadTexture(result.ScreenShot);
+        uploadedUrl = request.result;
         if (uploadedUrl == "") return;
         view.SetShareAvilable(true);
     }

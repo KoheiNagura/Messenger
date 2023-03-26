@@ -15,14 +15,12 @@ public class InGamePresenter : MonoBehaviour, IPresenter
     [SerializeField] private つController controller;
 
     private Texture2D lastScreenShot;
-    private int lifeCount, maxLifeCount = 1;
+    private int lifeCount, maxLifeCount = 3;
     private (Sprite sprite, int pt) currentつData;
 
-    private async void Start()
+    private void Start()
     {
         SubscribeObservables();
-        Initialize();
-        await Open();
     }
 
     public void Initialize()
@@ -69,9 +67,6 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         controller.IsInteracting
             .Where(_ => isActivate)
             .Subscribe(i => view.PlayNexつTween(i).AsAsyncUnitUniTask())
-            .AddTo(gameObject);
-        view.OnClickNexつ
-            .Subscribe(_ => print("clk"))
             .AddTo(gameObject);
         view.OnClickNexつ
             .Where(_ => isActivate && !controller.IsInteracting.Value)
