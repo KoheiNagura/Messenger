@@ -18,11 +18,9 @@ public class InGamePresenter : MonoBehaviour, IPresenter
     private int lifeCount, maxLifeCount = 3;
     private (Sprite sprite, int pt) currentつData;
 
-    private async void Start()
+    private void Start()
     {
         SubscribeObservables();
-        Initialize();
-        await Open();
     }
 
     public void Initialize()
