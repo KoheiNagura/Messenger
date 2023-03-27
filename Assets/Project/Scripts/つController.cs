@@ -124,8 +124,8 @@ public class つController : MonoBehaviour
         var screenPosition = new Vector3(0, 0, Camera.main.transform.position.z) + (Vector3)mousePosition;
         var worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
         var delta = (Vector2)(worldPosition - Currentつ.gameObject.transform.position);
-        delta.x = Mathf.Clamp(delta.x, -1, 1);
-        delta.y = Mathf.Clamp(delta.y, -1, 1);
+        delta.x = Mathf.Clamp(delta.x, -1.2f, 1.2f);
+        delta.y = Mathf.Clamp(delta.y, -1.2f, 1.2f);
         return delta;
     }
 
