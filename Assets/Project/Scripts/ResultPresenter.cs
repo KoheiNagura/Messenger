@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using InputAsRx.Triggers;
 using UniRx;
 using Cysharp.Threading.Tasks;
 
@@ -53,6 +54,10 @@ public class ResultPresenter : MonoBehaviour, IPresenter
         view.OnClickMisskey
             .Where(_ => isActivate && view.isAvailableShare)
             .Subscribe(_ => SharingManager.Note(result.Stacks.Count, result.TotalPt, uploadedUrl))
+            .AddTo(gameObject);
+        this.OnKeyDownAsObservable(KeyCode.Space)
+            .Where(_ => isActivate)
+            .Subscribe(_ => BackToInGame())
             .AddTo(gameObject);
     }
 
