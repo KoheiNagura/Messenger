@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using InputAsRx.Triggers;
 using UniRx;
 using Cysharp.Threading.Tasks;
 
@@ -54,12 +55,17 @@ public class ResultPresenter : MonoBehaviour, IPresenter
             .Where(_ => isActivate && view.isAvailableShare)
             .Subscribe(_ => SharingManager.Note(result.Stacks.Count, result.TotalPt, uploadedUrl))
             .AddTo(gameObject);
+        this.OnKeyDownAsObservable(KeyCode.Space)
+            .Where(_ => isActivate)
+            .Subscribe(_ => BackToInGame())
+            .AddTo(gameObject);
     }
 
     public async UniTask Open()
     {
         isActivate = true;
         view.SetShareAvilable(false);
+        SEManager.Play(AudioType.OpenModal);
         await view.PlayTween();
         view.SetLaycastTarget(true);
     }
@@ -70,6 +76,7 @@ public class ResultPresenter : MonoBehaviour, IPresenter
         view.SetLaycastTarget(false);
         view.CloseShare();
         view.SetShareAvilable(false);
+        SEManager.Play(AudioType.CloseModal);
         await view.PlayTween(true);
     }
 

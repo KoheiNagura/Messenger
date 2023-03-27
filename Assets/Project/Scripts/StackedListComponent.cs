@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class StackedListComponent : MonoBehaviour
 {
     [SerializeField] private StackedListCellComponent cellPrefab;
-    [SerializeField] private RectTransform contentParent;
+    [SerializeField] private ScrollRect scrollRect;
     private const int MIN_CELL_COUNT = 6;
 
     public void SetValue(IList<(int usedCount, Sprite sprite, string fontFamily)> stacks)
@@ -16,7 +17,7 @@ public class StackedListComponent : MonoBehaviour
         for (var i = 0; i < cellCount; i++)
         {
             var cell = Instantiate(cellPrefab);
-            cell.transform.SetParent(contentParent, false);
+            cell.transform.SetParent(scrollRect.content, false);
             if (i < stacks.Count)
             {
                 var data = stacks[i];
@@ -27,11 +28,12 @@ public class StackedListComponent : MonoBehaviour
                 cell.SetValue(0, null, "");
             }
         }
+        scrollRect.normalizedPosition = Vector2.one;
     }
 
     public void DestroyCells()
     {
-        foreach (Transform child in contentParent)
+        foreach (Transform child in scrollRect.content)
         {
             Destroy(child.gameObject);
         }

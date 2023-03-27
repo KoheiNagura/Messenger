@@ -1590,7 +1590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: -8238169732365982632, guid: 886a5cebb3903f44ca2a90448c3d0bc5, type: 3}
-  contentParent: {fileID: 8037599120775720772}
+  scrollRect: {fileID: 8455593129487660482}
 --- !u!1 &5422786801563817939
 GameObject:
   m_ObjectHideFlags: 0
