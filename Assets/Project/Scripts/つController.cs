@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using InputAsRx.Triggers;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 public class つController : MonoBehaviour 
 {
@@ -44,10 +45,13 @@ public class つController : MonoBehaviour
     private void SubscribeObservables()
     {
         var onDragObservable = this.OnKeyAsObservable(KeyCode.Mouse0)
+            .Where(_ => !EventSystem.current.IsPointerOverGameObject())
             .Select(_ => ConvertMousePositionToDelta(Input.mousePosition).x);
+        var onKeyObservable = this.OnKeyAsObservable(KeyCode.Mouse0)
+            .Where(_ => !EventSystem.current.IsPointerOverGameObject());
 
         Observable
-            .Merge(this.OnKeyAsObservable(KeyCode.Space), this.OnKeyAsObservable(KeyCode.Mouse0))
+            .Merge(this.OnKeyAsObservable(KeyCode.Space), onKeyObservable)
             .Where(_ => Currentつ != null)
             .Subscribe(_ => Rotaつ())
             .AddTo(gameObject);
