@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using InputAsRx.Triggers;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 public class つController : MonoBehaviour 
 {
@@ -43,15 +44,24 @@ public class つController : MonoBehaviour
 
     private void SubscribeObservables()
     {
-        this.OnKeyAsObservable(KeyCode.Space)
+        var onDragObservable = this.OnKeyAsObservable(KeyCode.Mouse0)
+            .Where(_ => !EventSystem.current.IsPointerOverGameObject())
+            .Select(_ => ConvertMousePositionToDelta(Input.mousePosition).x);
+        var onKeyObservable = this.OnKeyAsObservable(KeyCode.Mouse0)
+            .Where(_ => !EventSystem.current.IsPointerOverGameObject());
+
+        Observable
+            .Merge(this.OnKeyAsObservable(KeyCode.Space), onKeyObservable)
             .Where(_ => Currentつ != null)
             .Subscribe(_ => Rotaつ())
             .AddTo(gameObject);
-        this.OnKeyUpAsObservable(KeyCode.Space)
+        Observable
+            .Merge(this.OnKeyUpAsObservable(KeyCode.Space), this.OnKeyUpAsObservable(KeyCode.Mouse0))
             .Where(_ => Currentつ != null)
             .Subscribe(_ => Drop())
             .AddTo(gameObject);
-        this.OnAxisAsObservable("Horizontal")
+        Observable
+            .Merge(this.OnAxisAsObservable("Horizontal"), onDragObservable)
             .Where(_ => Currentつ != null)
             .Subscribe(x => axisX = x)
             .AddTo(gameObject);
@@ -96,6 +106,7 @@ public class つController : MonoBehaviour
             .AddTo(Currentつ);
         lastDroppedつ = Currentつ;
         Currentつ = null;
+        axisX = 0;
     }
 
     private void DroppedEvent(Subject<つ> subject, つ dropped)
@@ -105,6 +116,17 @@ public class つController : MonoBehaviour
             isInteractingProperty.Value = false;
         }
         subject.OnNext(dropped);
+    }
+
+    private Vector2 ConvertMousePositionToDelta(Vector2 mousePosition)
+    {
+        if (Currentつ == null) return Vector2.zero;
+        var screenPosition = new Vector3(0, 0, Camera.main.transform.position.z) + (Vector3)mousePosition;
+        var worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+        var delta = (Vector2)(worldPosition - Currentつ.gameObject.transform.position);
+        delta.x = Mathf.Clamp(delta.x, -1, 1);
+        delta.y = Mathf.Clamp(delta.y, -1, 1);
+        return delta;
     }
 
     private void Move(float x)
