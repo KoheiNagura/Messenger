@@ -65,6 +65,7 @@ public class ResultPresenter : MonoBehaviour, IPresenter
     {
         isActivate = true;
         view.SetShareAvilable(false);
+        SEManager.Play(AudioType.OpenModal);
         await view.PlayTween();
         view.SetLaycastTarget(true);
     }
@@ -75,6 +76,7 @@ public class ResultPresenter : MonoBehaviour, IPresenter
         view.SetLaycastTarget(false);
         view.CloseShare();
         view.SetShareAvilable(false);
+        SEManager.Play(AudioType.CloseModal);
         await view.PlayTween(true);
     }
 

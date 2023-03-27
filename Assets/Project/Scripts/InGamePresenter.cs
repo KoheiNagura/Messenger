@@ -121,6 +121,7 @@ public class InGamePresenter : MonoBehaviour, IPresenter
             ScreenRecorder.GetTexture(Camera.main),
             camera.MoveCameraIfNeeded().AsAsyncUnitUniTask());
         model.AddStacked(stopped.sprite, stopped.pt);
+        SEManager.Play(AudioType.Stuck);
         if (controller.Currentつ == null)
         {
             UpdateView();
@@ -136,11 +137,13 @@ public class InGamePresenter : MonoBehaviour, IPresenter
         if (lifeCount < 1)
         {
             GameOver();
+            return;
         } 
-        else if (controller.Currentつ == null) 
+        else if (controller.Currentつ == null && !controller.IsInteracting.Value) 
         {
             UpdateView();
             Generaつ();
         }
+        SEManager.Play(AudioType.Drop);
     }
 }
