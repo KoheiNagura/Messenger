@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 140428285ce2f504a8026137bfc69e4a
+guid: a142b22b8c6102f469ce58048010acc7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -67,7 +67,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -129,76 +129,34 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: dotted_line
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 1002
-        width: 16
-        height: 2
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5ebe33805b629ef4b988867106fe3d81
-      internalID: -1309371789
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: circle
-      rect:
-        serializedVersion: 2
-        x: 701
-        y: 529
-        width: 280
-        height: 280
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 139, y: 139, z: 139, w: 140}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cc2fcf78ba4ab994eabd0fdc5e070f67
-      internalID: -160167676
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: frame
       rect:
         serializedVersion: 2
-        x: 512
-        y: 668
-        width: 148
-        height: 148
+        x: 5
+        y: 497
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 5, y: 5, z: 5, w: 5}
+      border: {x: 3, y: 3, z: 3, w: 3}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6c00c0ae65453cb428f0a1387377437f
-      internalID: -791749938
+      spriteID: 0cc3ac7cea7d4424791a830448e78fa2
+      internalID: 1365589001
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: grid
+      name: icon_stamp
       rect:
         serializedVersion: 2
-        x: 8
-        y: 240
-        width: 476
-        height: 576
+        x: 5
+        y: 5
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,20 +164,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0ba3e105edb895640802cf0fd2bc7c26
-      internalID: 860159219
+      spriteID: 64b88b5b523e17b42af2594b70d0c852
+      internalID: 1557953966
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: share_icon
+      name: icon_share
       rect:
         serializedVersion: 2
-        x: 0
-        y: 4
-        width: 212
-        height: 212
+        x: 379
+        y: 123
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -227,20 +185,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 65a6630cf1328854ca539c69dbfdd7bf
-      internalID: 473252048
+      spriteID: 58b3c0f0ae1253741a60a873c7123d07
+      internalID: 1299718730
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tweet_icon
+      name: icon_misskey
       rect:
         serializedVersion: 2
-        x: 228
-        y: 6
-        width: 212
-        height: 212
+        x: 379
+        y: 251
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -248,20 +206,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 908c91f6769db664fb2fbda68c405dd1
-      internalID: -1489796455
+      spriteID: 9e6614c8b157bab46aed5a7471e6822e
+      internalID: 483972615
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: misskey_icon
+      name: icon_twitter
       rect:
         serializedVersion: 2
-        x: 462
-        y: 8
-        width: 212
-        height: 212
+        x: 379
+        y: 379
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -269,8 +227,134 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e55ab2a40cd735b4798c7ae0ad9609b6
-      internalID: 1607626079
+      spriteID: 64b70c7323cf042448ea9f6c9c4edab8
+      internalID: 1130645665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: round_256
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 234
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 128, y: 128, z: 128, w: 128}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 567bc0f9205531a489f95353987f834a
+      internalID: 2079829978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: round_8
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 193
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93ce50204e632344cb6ea0c0caf9be1b
+      internalID: 897350097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: round_16
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 189
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 8, y: 8, z: 8, w: 8}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d621995f867616749a85d9cc0f31e8ae
+      internalID: -2084996604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: round_32
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 181
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 16, y: 16, z: 16, w: 16}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09e36589a8ef43149a8741c7b0eed765
+      internalID: 1368037620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: round_64
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 165
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 32, y: 32, z: 32, w: 32}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c82f49f069364114ebe5e26a58ffbb50
+      internalID: 607204361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dotted_line
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 505
+        width: 16
+        height: 2
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bab70f50cc347584aa07b9dfbca34dec
+      internalID: 1123198338
       vertices: []
       indices: 
       edges: []
@@ -286,13 +370,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      circle: -160167676
-      grid: 1550659673
-      misskey_icon: 1607626079
-      share_icon: 473252048
-      tweet_icon: -1489796455
-      frame: -791749938
-      dotted_line: -1309371789
+      round_16: -2084996604
+      icon_misskey: 483972615
+      icon_share: 1299718730
+      round_64: 607204361
+      round_256: 2079829978
+      round_8: 897350097
+      icon_twitter: 1130645665
+      frame: 1365589001
+      icon_stamp: 1557953966
+      round_32: 1368037620
+      dotted_line: 1123198338
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
