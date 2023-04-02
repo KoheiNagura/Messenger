@@ -60,6 +60,12 @@ public class RankingPresenter : MonoBehaviour, IPresenter
             if (i < 3) view.SetHigherRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn, record.screenShot);
             else view.SetRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn);
         }
+        var dummyCount = 8 - result.Count;
+        if (dummyCount < 1) return;
+        for (var i = 0; i < dummyCount; i++)
+        {
+            view.SetRankingCell(-1, "", -1, -1, false);
+        }
     }
 
     private async void SendRanking()

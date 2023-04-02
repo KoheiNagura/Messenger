@@ -21,10 +21,10 @@ public class RankingCell : MonoBehaviour
 
     public void SetValue(int rank, string name, int stackedCount, int score)
     {
-        rankLabel.text = $"{rank}";
+        rankLabel.text = rank > -1 ? $"{rank}" : "";
         nameLabel.text = $"{name}";
-        stackedCountLabel.text = $"{stackedCount}つ";
-        scoreLabel.text = $"{score:#,0}pt";
+        stackedCountLabel.text = stackedCount > -1 ? $"{stackedCount}つ" : "";
+        scoreLabel.text = score > -1 ? $"{score:#,0}pt" : "";
     }
 
     public void SetThumbneil(Texture2D texture)

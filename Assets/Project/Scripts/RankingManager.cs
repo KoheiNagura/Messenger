@@ -10,7 +10,7 @@ using NCMB.Tasks;
 [CreateAssetMenu(fileName = "RankingManager", menuName = "Messenger/RankingManager")]
 public class RankingManager : ScriptableObject
 {
-    private const int LIMIT = 10;
+    private const int LIMIT = 30;
     private const string CLASS_NAME = "ranking";
     private const string USERID_KEY = "userId";
 
