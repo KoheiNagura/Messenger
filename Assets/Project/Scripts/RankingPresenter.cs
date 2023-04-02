@@ -10,13 +10,13 @@ public class RankingPresenter : MonoBehaviour, IPresenter
 
     [SerializeField] private RankingManager ranking;
     [SerializeField] private RankingView view;
+    [SerializeField] private ResultPresenter resultPresenter;
 
-    private GameResult result;
+    private GameResult gameResult;
 
     private void Start()
     {
         SubscribeObservables();
-        Open();
     }
 
     private void SubscribeObservables()
@@ -41,10 +41,14 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         view.SetAvailableSend(false);
         await SetRankingCells();
         await view.PlayTween();
+        view.SetLaycastTarget(true);
+        isActivate = true;
     }
 
     public async UniTask Close()
     {
+        isActivate = false;
+        view.SetLaycastTarget(false);
         await view.PlayTween(true);
         view.ResetRankingCells();
     }
@@ -70,7 +74,8 @@ public class RankingPresenter : MonoBehaviour, IPresenter
 
     private async void SendRanking()
     {
-        var record = ranking.GetRecord(view.InputUserName, result.TotalPt, result.Stacks.Count, result.ScreenShot);
+        view.SetAvailableSend(false);
+        var record = ranking.GetRecord(view.InputUserName, gameResult.TotalPt, gameResult.Stacks.Count, gameResult.ScreenShot);
         await ranking.Save(record);
         // viewの更新と挿入
     }
@@ -78,8 +83,9 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     private async void BackToResult()
     {
         await Close();
+        resultPresenter.SetActivate();
     }
 
     public void SetResult(GameResult result)
-        => this.result = result;
+        => this.gameResult = result;
 }

@@ -30,11 +30,14 @@ public class ResultView : MonoBehaviour
     public IObservable<Unit> OnClickMisskey
         => shareButton.onClickMisskey.AsObservable()
             .Where(_ => isInteractable && shareButton.isAvailable);
+    public IObservable<Unit> OnClickRanking
+        => rankingButton.onClick.AsObservable().Where(_ => isInteractable);
 
     private Sequence fadeInSequence;
     [SerializeField] private Button background;
     [SerializeField] private RectTransform wrapper;
     [SerializeField] private ShareButtonComponent shareButton;
+    [SerializeField] private Button rankingButton;
     [SerializeField] private TextMeshProUGUI totalPtLabel;
     [SerializeField] private RawImage screenShotImage;
     [SerializeField] private StackedListComponent stackedList;

@@ -10,6 +10,7 @@ public class ResultPresenter : MonoBehaviour, IPresenter
     public bool isActivate { get; private set; }
     [SerializeField] private ResultView view;
     [SerializeField] private InGamePresenter inGamePresenter;
+    [SerializeField] private RankingPresenter rankingPresenter;
     [SerializeField] private GyazoUploader uploader;
     private GameResult result;
     private string uploadedUrl;
@@ -55,6 +56,10 @@ public class ResultPresenter : MonoBehaviour, IPresenter
             .Where(_ => isActivate && view.isAvailableShare)
             .Subscribe(_ => SharingManager.Note(result.Stacks.Count, result.TotalPt, uploadedUrl))
             .AddTo(gameObject);
+        view.OnClickRanking
+            .Where(_ => isActivate)
+            .Subscribe(_ => MoveToRanking())
+            .AddTo(gameObject);
         this.OnKeyDownAsObservable(KeyCode.Space)
             .Where(_ => isActivate)
             .Subscribe(_ => BackToInGame())
@@ -98,4 +103,14 @@ public class ResultPresenter : MonoBehaviour, IPresenter
         await Close();
         await inGamePresenter.Open();
     }
+
+    private async void MoveToRanking()
+    {
+        isActivate = false;
+        rankingPresenter.SetResult(result);
+        await rankingPresenter.Open();
+    }
+
+    public void SetActivate()
+        => isActivate = true;
 }
