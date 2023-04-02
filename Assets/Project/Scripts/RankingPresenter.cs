@@ -19,7 +19,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
             stackedCount = 999,
             screenShot = texture
         };
-        ranking.Save(record);
+        await ranking.Save(record);
     }
 
     public async UniTask Open()
