@@ -23,10 +23,13 @@ public class RankingView : MonoBehaviour
         => background.OnClickAsObservable().Where(_ => isInteractable);
     public IObservable<Unit> OnClickSendRanking
         => sendButton.onClick.AsObservable().Where(_ => isInteractable);
+    public IObservable<Unit> OnEndEdit
+        => userNameInput.onEndEdit.AsObservable().Where(_ => isInteractable).Select(_ => Unit.Default);
 
     [SerializeField] private RankingCell rankingCellPrefab, higherRankingCellPrefab;
     [SerializeField] private Button background;
-    [SerializeField] private RectTransform wrapper, contentParent;
+    [SerializeField] private RectTransform wrapper;
+    [SerializeField] private ScrollRect scroll;
     [SerializeField] private Button sendButton;
     [SerializeField] private TMP_InputField userNameInput;
     [SerializeField] private TextMeshProUGUI stackedCountLabel, scoreLabel;
@@ -66,7 +69,7 @@ public class RankingView : MonoBehaviour
     public void SetRankingCell(int rank, string name, int stackedCount, int score, bool isHighlight)
     {
         var cell = Instantiate(rankingCellPrefab);
-        cell.transform.SetParent(contentParent, false);
+        cell.transform.SetParent(scroll.content, false);
         cell.SetValue(rank, name, stackedCount, score);
         if (isHighlight) cell.HighlightName();
     }
@@ -74,7 +77,7 @@ public class RankingView : MonoBehaviour
     public void SetHigherRankingCell(int rank, string name, int stackedCount, int score, bool isHighlight, Texture2D thumbneil)
     {
         var cell = Instantiate(higherRankingCellPrefab);
-        cell.transform.SetParent(contentParent, false);
+        cell.transform.SetParent(scroll.content, false);
         cell.SetValue(rank, name, stackedCount, score);
         if (isHighlight) cell.HighlightName();
         cell.SetThumbneil(thumbneil);
@@ -82,7 +85,7 @@ public class RankingView : MonoBehaviour
 
     public void ResetRankingCells()
     {
-        foreach(Transform child in contentParent)
+        foreach(Transform child in scroll.content)
         {
             Destroy(child.gameObject);
         }
@@ -90,4 +93,14 @@ public class RankingView : MonoBehaviour
 
     public void SetAvailableSend(bool isAvailable)
         => sendButton.interactable = isAvailable;
+
+    public void UpdateInputText(string text)
+        => userNameInput.text = text;
+
+    public void SetScrollPosition(float y)
+    {
+        var pos = Vector2.zero;
+        pos.y = y;
+        scroll.normalizedPosition = pos;
+    }
 }

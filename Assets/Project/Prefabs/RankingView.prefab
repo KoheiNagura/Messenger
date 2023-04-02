@@ -3964,7 +3964,7 @@ MonoBehaviour:
   higherRankingCellPrefab: {fileID: 5493630557221419552, guid: 1ea03c5721189d642958ee2169b288b6, type: 3}
   background: {fileID: 4173783236385234306}
   wrapper: {fileID: 3574536596706750728}
-  contentParent: {fileID: 439775472585444873}
+  scroll: {fileID: 2074296306585490575}
   sendButton: {fileID: 3934772663077726510}
   userNameInput: {fileID: 6701348743654220839}
   stackedCountLabel: {fileID: 7523231749842831165}
@@ -3983,6 +3983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ranking: {fileID: 11400000, guid: c51a4deef79a34251b8e0bb0bee4adab, type: 2}
   view: {fileID: 5960779578091338971}
+  resultPresenter: {fileID: 0}
 --- !u!1 &8929864459952254607
 GameObject:
   m_ObjectHideFlags: 0

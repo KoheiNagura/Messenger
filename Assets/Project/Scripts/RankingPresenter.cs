@@ -12,6 +12,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     [SerializeField] private RankingView view;
     [SerializeField] private ResultPresenter resultPresenter;
 
+    private string vailedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉっゃゅょゎー ";
     private GameResult gameResult;
 
     private void Start()
@@ -28,6 +29,10 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         view.OnClickSendRanking
             .Where(_ => isActivate)
             .Subscribe(_ => SendRanking())
+            .AddTo(gameObject);
+        view.OnEndEdit
+            .Where(_ => isActivate)
+            .Subscribe(_ => RemoveInvalidChar())
             .AddTo(gameObject);
         this.UpdateAsObservable()
             .Where(_ => isActivate)
@@ -51,6 +56,8 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         view.SetLaycastTarget(false);
         await view.PlayTween(true);
         view.ResetRankingCells();
+        view.SetScrollPosition(1);
+        view.UpdateInputText("");
     }
 
     private async UniTask SetRankingCells()
@@ -74,6 +81,10 @@ public class RankingPresenter : MonoBehaviour, IPresenter
 
     private async void SendRanking()
     {
+        var length = view.InputUserName.Length;
+        RemoveInvalidChar();
+        if (view.InputUserName.Length < 1) return;
+        if (view.InputUserName.Length != length) return;
         view.SetAvailableSend(false);
         var record = ranking.GetRecord(view.InputUserName, gameResult.TotalPt, gameResult.Stacks.Count, gameResult.ScreenShot);
         await ranking.Save(record);
@@ -85,6 +96,15 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         await Close();
         resultPresenter.SetActivate();
     }
+
+    private void RemoveInvalidChar()
+    {
+        var text = new string(view.InputUserName.Select(i => FilterVailedChar(i)).ToArray());
+        view.UpdateInputText(text);
+    }
+
+    private char FilterVailedChar(char c)
+        => vailedCharacters.Contains(c) ? c : '\0';
 
     public void SetResult(GameResult result)
         => this.gameResult = result;
