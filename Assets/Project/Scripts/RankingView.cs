@@ -4,6 +4,7 @@ using DG.Tweening;
 using System;
 using UniRx;
 using Cysharp.Threading.Tasks;
+using TMPro;
 
 public class RankingView : MonoBehaviour
 {
@@ -16,12 +17,21 @@ public class RankingView : MonoBehaviour
         }
     }
 
+    public string InputUserName => userNameInput.text;
+
     public IObservable<Unit> OnClickBackground
         => background.OnClickAsObservable().Where(_ => isInteractable);
+    public IObservable<Unit> OnClickSendRanking
+        => sendButton.onClick.AsObservable().Where(_ => isInteractable);
+
+    [SerializeField] private RankingCell rankingCellPrefab, higherRankingCellPrefab;
+    [SerializeField] private Button background;
+    [SerializeField] private RectTransform wrapper, contentParent;
+    [SerializeField] private Button sendButton;
+    [SerializeField] private TMP_InputField userNameInput;
+    [SerializeField] private TextMeshProUGUI stackedCountLabel, scoreLabel;
 
     private Sequence fadeInSequence;
-    [SerializeField] private Button background;
-    [SerializeField] private RectTransform wrapper;
 
     public async UniTask PlayTween(bool playBackwards = false)
     {
@@ -52,4 +62,32 @@ public class RankingView : MonoBehaviour
 
     public void SetLaycastTarget(bool isOn)
         => background.targetGraphic.raycastTarget = isOn;
+
+    public void SetRankingCell(int rank, string name, int stackedCount, int score, bool isHighlight)
+    {
+        var cell = Instantiate(rankingCellPrefab);
+        cell.transform.SetParent(contentParent, false);
+        cell.SetValue(rank, name, stackedCount, score);
+        if (isHighlight) cell.HighlightName();
+    }
+
+    public void SetHigherRankingCell(int rank, string name, int stackedCount, int score, bool isHighlight, Texture2D thumbneil)
+    {
+        var cell = Instantiate(higherRankingCellPrefab);
+        cell.transform.SetParent(contentParent, false);
+        cell.SetValue(rank, name, stackedCount, score);
+        if (isHighlight) cell.HighlightName();
+        cell.SetThumbneil(thumbneil);
+    }
+
+    public void ResetRankingCells()
+    {
+        foreach(Transform child in contentParent)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void SetAvailableSend(bool isAvailable)
+        => sendButton.interactable = isAvailable;
 }

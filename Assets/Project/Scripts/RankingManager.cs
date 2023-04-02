@@ -32,7 +32,7 @@ public class RankingManager : ScriptableObject
     {
         if (!isInitalized) Initialize();
         var query = new NCMBQuery<NCMBObject>(CLASS_NAME);
-        query.Limit = LIMIT;
+        query.Limit = limit;
         var result = await query.FindTaskAsync();
         return result.Select(i => ObjectToRecord(i)).ToList();
     }
@@ -122,7 +122,7 @@ public class RankingManager : ScriptableObject
         return record;
     }
 
-    private string GetUserId()
+    public string GetUserId()
     {
         var userId = PlayerPrefs.GetString(USERID_KEY);
         if (!string.IsNullOrEmpty(userId)) return userId;
