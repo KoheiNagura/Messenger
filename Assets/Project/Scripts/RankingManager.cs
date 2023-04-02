@@ -62,6 +62,8 @@ public class RankingManager : ScriptableObject
             return;
         }
         var ncmbObject = result[0];
+        var oldRecord = ObjectToRecord(ncmbObject);
+        if (oldRecord.score > record.score) return;
         ncmbObject = UpdateRecord(ncmbObject, record);
         await ncmbObject.SaveTaskAsync();
     }
@@ -127,6 +129,18 @@ public class RankingManager : ScriptableObject
         userId = Guid.NewGuid().ToString("N");
         PlayerPrefs.SetString(USERID_KEY, userId);
         return userId;
+    }
+
+    public RankingRecord GetRecord(string userName, int score, int stackedCount, Texture2D screenShot)
+    {
+        var record = new RankingRecord() {
+            userId = GetUserId(),
+            userName = userName,
+            score = score,
+            stackedCount = stackedCount,
+            screenShot = screenShot
+        };
+        return record;
     }
 }
 
