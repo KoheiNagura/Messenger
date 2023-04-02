@@ -32,7 +32,7 @@ public class RankingView : MonoBehaviour
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private Button sendButton;
     [SerializeField] private TMP_InputField userNameInput;
-    [SerializeField] private TextMeshProUGUI stackedCountLabel, scoreLabel;
+    [SerializeField] private TextMeshProUGUI rankLabel, stackedCountLabel, scoreLabel;
 
     private Sequence fadeInSequence;
 
@@ -102,5 +102,15 @@ public class RankingView : MonoBehaviour
         var pos = Vector2.zero;
         pos.y = y;
         scroll.normalizedPosition = pos;
+    }
+
+    public void SetPlayerInfo(int rank, int stackedCount, int score)
+    {
+        if (rank < 1 || rank > RankingManager.LIMIT)
+        {
+            rankLabel.text = "-";
+        } else rankLabel.text = $"{rank}";
+        stackedCountLabel.text = $"{stackedCount} つ";
+        scoreLabel.text = $"{score}pt";
     }
 }

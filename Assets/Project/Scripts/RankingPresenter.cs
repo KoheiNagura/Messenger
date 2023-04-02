@@ -2,6 +2,7 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using System.Linq;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 public class RankingPresenter : MonoBehaviour, IPresenter
@@ -12,6 +13,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     [SerializeField] private RankingView view;
     [SerializeField] private ResultPresenter resultPresenter;
 
+    private List<RankingRecord> records;
     private string vailedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉっゃゅょゎー ";
     private GameResult gameResult;
 
@@ -45,6 +47,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         // await view.PlayLoadingAnimation();
         view.SetAvailableSend(false);
         await SetRankingCells();
+        SetPlayerInfo();
         await view.PlayTween();
         view.SetLaycastTarget(true);
         isActivate = true;
@@ -53,6 +56,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     public async UniTask Close()
     {
         isActivate = false;
+        records = null;
         view.SetLaycastTarget(false);
         await view.PlayTween(true);
         view.ResetRankingCells();
@@ -62,16 +66,16 @@ public class RankingPresenter : MonoBehaviour, IPresenter
 
     private async UniTask SetRankingCells()
     {
-        var result = await ranking.Fetch();
-        result = result.OrderByDescending(i => i.score).ToList();
-        for (var i = 0; i < result.Count; i++)
+        records = await ranking.Fetch();
+        records = records.OrderByDescending(i => i.score).ToList();
+        for (var i = 0; i < records.Count; i++)
         {
-            var record = result[i];
+            var record = records[i];
             var isOwn = record.userId == ranking.GetUserId(); 
             if (i < 3) view.SetHigherRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn, record.screenShot);
             else view.SetRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn);
         }
-        var dummyCount = 8 - result.Count;
+        var dummyCount = 8 - records.Count;
         if (dummyCount < 1) return;
         for (var i = 0; i < dummyCount; i++)
         {
@@ -101,6 +105,23 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     {
         var text = new string(view.InputUserName.Select(i => FilterVailedChar(i)).ToArray());
         view.UpdateInputText(text);
+    }
+
+    private void SetPlayerInfo()
+    {
+        var rank = GetRank(gameResult.TotalPt);
+        view.SetPlayerInfo(rank, gameResult.Stacks.Count, gameResult.TotalPt);
+    }
+
+    private int GetRank(int score)
+    {
+        var rank = 1;
+        foreach (var s in records.Select(i => score))
+        {
+            if (s <= score) break;
+            rank++;
+        }
+        return rank;
     }
 
     private char FilterVailedChar(char c)
