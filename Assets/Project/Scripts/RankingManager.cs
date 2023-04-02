@@ -11,6 +11,8 @@ public class RankingManager : ScriptableObject
 {
     private const int LIMIT = 30;
     private const string CLASS_NAME = "ranking";
+    private const string USERID_KEY = "userId";
+
     [SerializeField] private string applicationKey, clientKey;
 
     private CancellationTokenSource token;
@@ -43,6 +45,10 @@ public class RankingManager : ScriptableObject
 
     public async void Save(RankingRecord record)
     {
+        // ユニークID指定してハイスコアの更新をするように。
+        // がんばれ明日の自分。
+
+        // ポスト時にobjectIdをPlayerPrefsで保持しとくのが丸そうか？
         var ncmbObject = RecordToObject(record);
         var result = default(NCMBException);
         ncmbObject.SaveAsync(e => result = e);
@@ -95,11 +101,21 @@ public class RankingManager : ScriptableObject
         record.screenShot = Base64ToTexture(base64);
         return record;
     }
+
+    private string GetUserId()
+    {
+        if (!PlayerPrefs.HasKey(USERID_KEY))
+        {
+            PlayerPrefs.SetString(USERID_KEY, Guid.NewGuid().ToString("N"));
+        }
+        return PlayerPrefs.GetString(USERID_KEY);
+    }
 }
 
 public class RankingRecord
 {
     public static readonly Vector2Int TextureSize = new Vector2Int(420, 594);
+    public string userId;
     public string userName;
     public int score;
     public int stackedCount;
