@@ -71,7 +71,8 @@ public class RankingManager : ScriptableObject
     private Texture2D Base64ToTexture(string base64)
     {
         var size = RankingRecord.TextureSize;
-        var texture = new Texture2D(size.x, size.y, TextureFormat.RGBA32, false);
+        var texture = new Texture2D(1, 1);
+        texture.hideFlags = HideFlags.HideAndDontSave;
         texture.LoadImage(Convert.FromBase64String(base64));
         return texture;
     }
@@ -79,19 +80,9 @@ public class RankingManager : ScriptableObject
     private string TextureToBase64(Texture2D texture)
     {
         var size = RankingRecord.TextureSize;
-        if (texture.width != size.x || texture.height != size.y)
-        {
-            texture = ResizeTexture(texture, RankingRecord.TextureSize);
-        }
         var encode = texture.EncodeToJPG();
+        Debug.Log(Convert.ToBase64String(encode));
         return Convert.ToBase64String(encode);
-    }
-
-    private Texture2D ResizeTexture(Texture2D source, Vector2Int size)
-    {
-        var result = new Texture2D(size.x, size.y, TextureFormat.RGBA32, false);
-        Graphics.ConvertTexture(source, result);
-        return result;
     }
 
     private NCMBObject RecordToObject(RankingRecord record)
