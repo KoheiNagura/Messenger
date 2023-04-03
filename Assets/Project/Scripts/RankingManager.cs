@@ -64,7 +64,7 @@ public class RankingManager : ScriptableObject
     {
         if (!isInitalized) Initialize();
         var query = new NCMBQuery<NCMBObject>(CLASS_NAME_SCREENSHOT);
-        query.WhereEqualTo(nameof(RankingRecord.userId), GetUserId());
+        query.WhereEqualTo(nameof(RankingRecord.userId), userId);
         query.Limit = 1;
         var result = await query.FindTaskAsync();
         if (result.Count < 1) return null;
