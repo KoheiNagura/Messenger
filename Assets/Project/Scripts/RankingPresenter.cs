@@ -13,6 +13,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     [SerializeField] private RankingView view;
     [SerializeField] private ResultPresenter resultPresenter;
 
+    private bool isSent;
     private List<RankingRecord> records;
     private string vailedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉっゃゅょゎー ";
     private GameResult gameResult;
@@ -37,13 +38,13 @@ public class RankingPresenter : MonoBehaviour, IPresenter
             .Subscribe(_ => RemoveInvalidChar())
             .AddTo(gameObject);
         this.UpdateAsObservable()
-            .Where(_ => isActivate)
             .Subscribe(_ => view.SetAvailableSend(view.InputUserName.Length > 0))
             .AddTo(gameObject);
     }
 
     public async UniTask Open()
     {
+        isSent = false;
         view.SetAvailableSend(false);
         await FetchRanking();
         SetPlayerInfo();
@@ -99,10 +100,13 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         RemoveInvalidChar();
         if (view.InputUserName.Length < 1) return;
         if (view.InputUserName.Length != length) return;
+        isSent = true;
         view.SetAvailableSend(false);
         var record = ranking.GetRecord(view.InputUserName, gameResult.TotalPt, gameResult.Stacks.Count);
         await ranking.Save(record, gameResult.ScreenShot);
-        // viewの更新と挿入
+        view.SetScrollPosition(1);
+        view.ResetRankingCells();
+        SetRankingCells();
     }
 
     private async void BackToResult()
