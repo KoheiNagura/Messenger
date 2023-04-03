@@ -13,6 +13,8 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     [SerializeField] private RankingView view;
     [SerializeField] private ResultPresenter resultPresenter;
 
+    private const int DUMMY_COUNT = 10;
+
     private bool isSent;
     private bool isHighScore;
     private List<RankingRecord> records;
@@ -87,7 +89,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
             else view.SetRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn);
             await UniTask.Delay(System.TimeSpan.FromSeconds(.05f));
         }
-        var dummyCount = 8 - records.Count;
+        var dummyCount = DUMMY_COUNT - records.Count;
         if (dummyCount < 1) return;
         for (var i = 0; i < dummyCount; i++)
         {
