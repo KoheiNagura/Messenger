@@ -72,6 +72,7 @@ public class RankingView : MonoBehaviour
         cell.transform.SetParent(scroll.content, false);
         cell.SetValue(rank, name, stackedCount, score);
         if (isHighlight) cell.HighlightName();
+        cell.PlayTween();
     }
 
     public void SetHigherRankingCell(int rank, string name, int stackedCount, int score, bool isHighlight, Texture2D thumbneil)
@@ -81,6 +82,7 @@ public class RankingView : MonoBehaviour
         cell.SetValue(rank, name, stackedCount, score);
         if (isHighlight) cell.HighlightName();
         cell.SetThumbneil(thumbneil);
+        cell.PlayTween();
     }
 
     public void ResetRankingCells()

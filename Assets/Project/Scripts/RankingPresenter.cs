@@ -48,6 +48,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         await FetchRanking();
         SetPlayerInfo();
         await view.PlayTween();
+        SetRankingCells();
         view.SetLaycastTarget(true);
         isActivate = true;
     }
@@ -67,18 +68,28 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     {
         records = await ranking.Fetch();
         records = records.OrderByDescending(i => i.score).ToList();
+    }
+
+    private async void SetRankingCells()
+    {
         for (var i = 0; i < records.Count; i++)
         {
             var record = records[i];
-            var isOwn = record.userId == ranking.GetUserId(); 
-            if (i < 3) view.SetHigherRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn, record.screenShot);
+            var isOwn = record.userId == ranking.GetUserId();
+            if (i < 3) 
+            {
+                var thumbneil = await ranking.GetScreenShot(record.userId);
+                view.SetHigherRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn, thumbneil);
+            }
             else view.SetRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn);
+            await UniTask.Delay(System.TimeSpan.FromSeconds(.05f));
         }
         var dummyCount = 8 - records.Count;
         if (dummyCount < 1) return;
         for (var i = 0; i < dummyCount; i++)
         {
             view.SetRankingCell(-1, "", -1, -1, false);
+            await UniTask.Delay(System.TimeSpan.FromSeconds(.05f));
         }
     }
 
