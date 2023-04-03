@@ -44,9 +44,8 @@ public class RankingPresenter : MonoBehaviour, IPresenter
 
     public async UniTask Open()
     {
-        // await view.PlayLoadingAnimation();
         view.SetAvailableSend(false);
-        await SetRankingCells();
+        await FetchRanking();
         SetPlayerInfo();
         await view.PlayTween();
         view.SetLaycastTarget(true);
@@ -64,7 +63,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         view.UpdateInputText("");
     }
 
-    private async UniTask SetRankingCells()
+    private async UniTask FetchRanking()
     {
         records = await ranking.Fetch();
         records = records.OrderByDescending(i => i.score).ToList();
@@ -90,8 +89,8 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         if (view.InputUserName.Length < 1) return;
         if (view.InputUserName.Length != length) return;
         view.SetAvailableSend(false);
-        var record = ranking.GetRecord(view.InputUserName, gameResult.TotalPt, gameResult.Stacks.Count, gameResult.ScreenShot);
-        await ranking.Save(record);
+        var record = ranking.GetRecord(view.InputUserName, gameResult.TotalPt, gameResult.Stacks.Count);
+        await ranking.Save(record, gameResult.ScreenShot);
         // viewの更新と挿入
     }
 

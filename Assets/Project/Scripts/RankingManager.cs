@@ -11,8 +11,9 @@ using NCMB.Tasks;
 public class RankingManager : ScriptableObject
 {
     public const int LIMIT = 30;
-    private const string CLASS_NAME = "ranking";
-    private const string USERID_KEY = "userId";
+    private const string CLASS_NAME_RANKING = "ranking";
+    private const string CLASS_NAME_SCREENSHOT = "screenshot";
+    private const string KEY_USERID = "userId";
 
     [SerializeField] private string applicationKey, clientKey;
 
@@ -31,18 +32,45 @@ public class RankingManager : ScriptableObject
     public async UniTask<List<RankingRecord>> Fetch(int limit = LIMIT)
     {
         if (!isInitalized) Initialize();
-        var query = new NCMBQuery<NCMBObject>(CLASS_NAME);
+        var query = new NCMBQuery<NCMBObject>(CLASS_NAME_RANKING);
         query.Limit = limit;
         var result = await query.FindTaskAsync();
         return result.Select(i => ObjectToRecord(i)).ToList();
     }
 
-    public async UniTask Save(RankingRecord record)
+    public async UniTask Save(RankingRecord record, Texture2D texture)
     {
         if (!isInitalized) Initialize();
-        if (PlayerPrefs.HasKey(USERID_KEY))
+        if (PlayerPrefs.HasKey(KEY_USERID))
             await UpdateRecord(record);
         else await SaveRecord(record);
+        await SaveScreenShot(texture);
+    }
+
+    private async UniTask SaveScreenShot(Texture2D texture)
+    {
+        if (!isInitalized) Initialize();
+        var record = new ScreenShotRecord()
+        {
+            userId = GetUserId(),
+            base64 = TextureToBase64(texture)
+        };
+        if (PlayerPrefs.HasKey(KEY_USERID))
+            await UpdateScreenShotRecord(record);
+        else await SaveScreenShotRecord(record);
+    }
+
+    public async UniTask<Texture2D> GetScreenShot(string userId)
+    {
+        if (!isInitalized) Initialize();
+        var query = new NCMBQuery<NCMBObject>(CLASS_NAME_SCREENSHOT);
+        query.WhereEqualTo(nameof(RankingRecord.userId), GetUserId());
+        query.Limit = 1;
+        var result = await query.FindTaskAsync();
+        if (result.Count < 1) return null;
+        var ncmbObject = result[0];
+        var base64 = Convert.ToString(ncmbObject[nameof(ScreenShotRecord.base64)]);
+        return Base64ToTexture(base64);
     }
 
     private async UniTask SaveRecord(RankingRecord record)
@@ -53,8 +81,9 @@ public class RankingManager : ScriptableObject
 
     private async UniTask UpdateRecord(RankingRecord record)
     {
-        var query = new NCMBQuery<NCMBObject>(CLASS_NAME);
+        var query = new NCMBQuery<NCMBObject>(CLASS_NAME_RANKING);
         query.WhereEqualTo(nameof(RankingRecord.userId), GetUserId());
+        query.Limit = 1;
         var result = await query.FindTaskAsync();
         if (result.Count < 1) 
         {
@@ -68,9 +97,31 @@ public class RankingManager : ScriptableObject
         await ncmbObject.SaveTaskAsync();
     }
 
+    private async UniTask SaveScreenShotRecord(ScreenShotRecord record)
+    {
+        var obj = new NCMBObject(CLASS_NAME_SCREENSHOT);
+        obj[nameof(ScreenShotRecord.userId)] = record.userId;
+        obj[nameof(ScreenShotRecord.base64)] = record.base64;
+        await obj.SaveTaskAsync();
+    }
+
+    private async UniTask UpdateScreenShotRecord(ScreenShotRecord record)
+    {
+        var query = new NCMBQuery<NCMBObject>(CLASS_NAME_SCREENSHOT);
+        query.WhereEqualTo(nameof(ScreenShotRecord.userId), GetUserId());
+        var result = await query.FindTaskAsync();
+        if (result.Count < 1)
+        {
+            await SaveScreenShotRecord(record);
+            return;
+        }
+        var ncmbObject = result[0];
+        ncmbObject[nameof(ScreenShotRecord.base64)] = record.base64;
+        await ncmbObject.SaveTaskAsync();
+    }
+
     private Texture2D Base64ToTexture(string base64)
     {
-        var size = RankingRecord.TextureSize;
         var texture = new Texture2D(1, 1);
         texture.hideFlags = HideFlags.HideAndDontSave;
         texture.LoadImage(Convert.FromBase64String(base64));
@@ -79,7 +130,6 @@ public class RankingManager : ScriptableObject
 
     private string TextureToBase64(Texture2D texture)
     {
-        var size = RankingRecord.TextureSize;
         var encode = texture.EncodeToJPG();
         Debug.Log(Convert.ToBase64String(encode));
         return Convert.ToBase64String(encode);
@@ -87,7 +137,7 @@ public class RankingManager : ScriptableObject
 
     private NCMBObject RecordToObject(RankingRecord record)
     {
-        var obj = new NCMBObject(CLASS_NAME);
+        var obj = new NCMBObject(CLASS_NAME_RANKING);
         return UpdateRecord(obj, record);
     }
 
@@ -97,7 +147,6 @@ public class RankingManager : ScriptableObject
         obj[nameof(RankingRecord.userName)] = record.userName;
         obj[nameof(RankingRecord.score)] = record.score;
         obj[nameof(RankingRecord.stackedCount)] = record.stackedCount;
-        obj[nameof(RankingRecord.screenShot)] = TextureToBase64(record.screenShot);
         return obj;
     }
 
@@ -108,28 +157,25 @@ public class RankingManager : ScriptableObject
         record.userName = Convert.ToString(obj[nameof(RankingRecord.userName)]);
         record.score = Convert.ToInt32(obj[nameof(RankingRecord.score)]);
         record.stackedCount = Convert.ToInt32(obj[nameof(RankingRecord.stackedCount)]);
-        var base64 = Convert.ToString(obj[nameof(RankingRecord.screenShot)]);
-        record.screenShot = Base64ToTexture(base64);
         return record;
     }
 
     public string GetUserId()
     {
-        var userId = PlayerPrefs.GetString(USERID_KEY);
+        var userId = PlayerPrefs.GetString(KEY_USERID);
         if (!string.IsNullOrEmpty(userId)) return userId;
         userId = Guid.NewGuid().ToString("N");
-        PlayerPrefs.SetString(USERID_KEY, userId);
+        PlayerPrefs.SetString(KEY_USERID, userId);
         return userId;
     }
 
-    public RankingRecord GetRecord(string userName, int score, int stackedCount, Texture2D screenShot)
+    public RankingRecord GetRecord(string userName, int score, int stackedCount)
     {
         var record = new RankingRecord() {
             userId = GetUserId(),
             userName = userName,
             score = score,
             stackedCount = stackedCount,
-            screenShot = screenShot
         };
         return record;
     }
@@ -137,11 +183,14 @@ public class RankingManager : ScriptableObject
 
 public class RankingRecord
 {
-    public static readonly Vector2Int TextureSize = new Vector2Int(420, 594);
     public string userId;
     public string userName;
     public int score;
     public int stackedCount;
-    // 基本的にbase64で保管して必要なときだけtextureにしたい
-    public Texture2D screenShot;
+}
+
+public class ScreenShotRecord
+{
+    public string userId;
+    public string base64;
 }
