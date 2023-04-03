@@ -14,6 +14,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     [SerializeField] private ResultPresenter resultPresenter;
 
     private bool isSent;
+    private bool isHighScore;
     private List<RankingRecord> records;
     private string vailedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉっゃゅょゎー ";
     private GameResult gameResult;
@@ -38,6 +39,7 @@ public class RankingPresenter : MonoBehaviour, IPresenter
             .Subscribe(_ => RemoveInvalidChar())
             .AddTo(gameObject);
         this.UpdateAsObservable()
+            .Where(_ => isActivate && !isSent && isHighScore)
             .Subscribe(_ => view.SetAvailableSend(view.InputUserName.Length > 0))
             .AddTo(gameObject);
     }
@@ -123,7 +125,15 @@ public class RankingPresenter : MonoBehaviour, IPresenter
 
     private void SetPlayerInfo()
     {
+        isHighScore = true;
         var rank = GetRank(gameResult.TotalPt);
+        var userId = ranking.GetUserId();
+        if (records.Select(i => i.userId).Contains(userId))
+        {
+            var oldRecord = records.First(i => i.userId == userId);
+            isHighScore = oldRecord.score <= gameResult.TotalPt;
+            if (!isHighScore) rank = -1;
+        }
         view.SetPlayerInfo(rank, gameResult.Stacks.Count, gameResult.TotalPt);
     }
 
