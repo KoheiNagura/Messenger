@@ -13,6 +13,10 @@ public class RankingPresenter : MonoBehaviour, IPresenter
     [SerializeField] private RankingView view;
     [SerializeField] private ResultPresenter resultPresenter;
 
+    private const int DUMMY_COUNT = 10;
+
+    private bool isSent;
+    private bool isHighScore;
     private List<RankingRecord> records;
     private string vailedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉっゃゅょゎー ";
     private GameResult gameResult;
@@ -37,18 +41,19 @@ public class RankingPresenter : MonoBehaviour, IPresenter
             .Subscribe(_ => RemoveInvalidChar())
             .AddTo(gameObject);
         this.UpdateAsObservable()
-            .Where(_ => isActivate)
+            .Where(_ => isActivate && !isSent && isHighScore)
             .Subscribe(_ => view.SetAvailableSend(view.InputUserName.Length > 0))
             .AddTo(gameObject);
     }
 
     public async UniTask Open()
     {
-        // await view.PlayLoadingAnimation();
+        isSent = false;
         view.SetAvailableSend(false);
-        await SetRankingCells();
+        await FetchRanking();
         SetPlayerInfo();
         await view.PlayTween();
+        SetRankingCells();
         view.SetLaycastTarget(true);
         isActivate = true;
     }
@@ -64,22 +69,32 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         view.UpdateInputText("");
     }
 
-    private async UniTask SetRankingCells()
+    private async UniTask FetchRanking()
     {
         records = await ranking.Fetch();
         records = records.OrderByDescending(i => i.score).ToList();
+    }
+
+    private async void SetRankingCells()
+    {
         for (var i = 0; i < records.Count; i++)
         {
             var record = records[i];
-            var isOwn = record.userId == ranking.GetUserId(); 
-            if (i < 3) view.SetHigherRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn, record.screenShot);
+            var isOwn = record.userId == ranking.GetUserId();
+            if (i < 3) 
+            {
+                var thumbneil = await ranking.GetScreenShot(record.userId);
+                view.SetHigherRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn, thumbneil);
+            }
             else view.SetRankingCell(i + 1, record.userName, record.stackedCount, record.score, isOwn);
+            await UniTask.Delay(System.TimeSpan.FromSeconds(.05f));
         }
-        var dummyCount = 8 - records.Count;
+        var dummyCount = DUMMY_COUNT - records.Count;
         if (dummyCount < 1) return;
         for (var i = 0; i < dummyCount; i++)
         {
             view.SetRankingCell(-1, "", -1, -1, false);
+            await UniTask.Delay(System.TimeSpan.FromSeconds(.05f));
         }
     }
 
@@ -89,10 +104,13 @@ public class RankingPresenter : MonoBehaviour, IPresenter
         RemoveInvalidChar();
         if (view.InputUserName.Length < 1) return;
         if (view.InputUserName.Length != length) return;
+        isSent = true;
         view.SetAvailableSend(false);
-        var record = ranking.GetRecord(view.InputUserName, gameResult.TotalPt, gameResult.Stacks.Count, gameResult.ScreenShot);
-        await ranking.Save(record);
-        // viewの更新と挿入
+        var record = ranking.GetRecord(view.InputUserName, gameResult.TotalPt, gameResult.Stacks.Count);
+        await ranking.Save(record, gameResult.ScreenShot);
+        view.SetScrollPosition(1);
+        view.ResetRankingCells();
+        SetRankingCells();
     }
 
     private async void BackToResult()
@@ -109,7 +127,15 @@ public class RankingPresenter : MonoBehaviour, IPresenter
 
     private void SetPlayerInfo()
     {
+        isHighScore = true;
         var rank = GetRank(gameResult.TotalPt);
+        var userId = ranking.GetUserId();
+        if (records.Select(i => i.userId).Contains(userId))
+        {
+            var oldRecord = records.First(i => i.userId == userId);
+            isHighScore = oldRecord.score <= gameResult.TotalPt;
+            if (!isHighScore) rank = -1;
+        }
         view.SetPlayerInfo(rank, gameResult.Stacks.Count, gameResult.TotalPt);
     }
 

@@ -359,6 +359,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: icon_ranking
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 5
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64c5a557026d0c3488cf71706701f5c9
+      internalID: -1645701968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -377,6 +398,7 @@ TextureImporter:
       round_256: 2079829978
       round_8: 897350097
       icon_twitter: 1130645665
+      icon_ranking: -1645701968
       frame: 1365589001
       icon_stamp: 1557953966
       round_32: 1368037620
